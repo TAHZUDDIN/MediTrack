@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_today"
+        icon="@mipmap/ic_assignment"
+        title="Today" />
+    <tab
+        id="@+id/tab_all"
+        icon="@mipmap/ic_assignment_ind"
+        title="All" />
+    <tab
+        id="@+id/tab_settings"
+        icon="@mipmap/ic_settings"
+        title="Settings" />
+</tabs>
