@@ -18,7 +18,8 @@
              android:layout_height="wrap_content"
              android:textColor="@android:color/white"
              android:layout_gravity="center"
-             android:textSize="18sp"/>
+             android:textSize="18sp"
+             android:textStyle="bold"/>
 
 
 
