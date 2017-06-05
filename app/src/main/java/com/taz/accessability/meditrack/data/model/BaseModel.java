@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by tahzuddin on 04/06/17.
  */
 
-public class BaseModel   implements Serializable {
+public class BaseModel implements Serializable {
     long id = -1;
     private String createdAt;
     private String updatedAt;

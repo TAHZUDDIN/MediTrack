@@ -23,6 +23,8 @@ public abstract class BaseDbHandler {
 
     abstract public BaseModel get(long id);
 
+    abstract public BaseModel get();
+
     abstract public void insert(BaseModel model);
 
     abstract public void update(BaseModel model);

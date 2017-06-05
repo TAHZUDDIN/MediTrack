@@ -3,20 +3,18 @@ package com.taz.accessability.meditrack.data;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
-import java.util.HashMap;
+import com.taz.accessability.meditrack.util.DateTimeUtil;
 
-import static com.taz.accessability.meditrack.data.DatabaseHelper.STUDENTS_TABLE_NAME;
+import static com.taz.accessability.meditrack.data.DatabaseHandler.getInstance;
+import static com.taz.accessability.meditrack.data.UserInfoDbHandler.TABLE_NAME;
 
 
 /**
@@ -27,30 +25,36 @@ public class AppContentProvider extends ContentProvider {
 
 
 
-    static final String PROVIDER_NAME = "com.taz.accessability.meditrack.AppContentProvider";
-    static final String URL = "content://" + PROVIDER_NAME + "/students";
-    public static final Uri CONTENT_URI = Uri.parse(URL);
+//    static final String PROVIDER_NAME = "com.taz.accessability.meditrack.AppContentProvider";
+//    static final String URL = "content://" + PROVIDER_NAME + "/students";
+//    public static final Uri CONTENT_URI = Uri.parse(URL);
 
 
 
-    public static final String _ID = "_id";
-    public static final String NAME = "name";
-    public static final String GRADE = "grade";
+
+    private static final String AUTHORITY = "com.taz.accessability.meditrack.AppContentProvider";
+    private static final String SCHEME = "content://";
+    private final static String USERINFO_SCHEMA = SCHEME + AUTHORITY + "/userInfo";
+    public final static Uri URI_USERINFO = Uri.parse(USERINFO_SCHEMA);
+    private final int USER_ALL = 1;
+
+    private final UriMatcher uriMatcher = buildUriMatcher();
+    private String TAG = AppContentProvider.class.getSimpleName();
 
 
-
-    private static HashMap<String, String> STUDENTS_PROJECTION_MAP;
-
-    static final int STUDENTS = 1;
-    static final int STUDENT_ID = 2;
-
-
-    static final UriMatcher uriMatcher;
-    static{
-        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(PROVIDER_NAME, "students", STUDENTS);
-        uriMatcher.addURI(PROVIDER_NAME, "students/#", STUDENT_ID);
+    private UriMatcher buildUriMatcher() {
+        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        uriMatcher.addURI(AUTHORITY, "userInfo", USER_ALL);
+        return uriMatcher;
     }
+
+
+//    static final UriMatcher uriMatcher;
+//    static{
+//        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+//        uriMatcher.addURI(AUTHORITY, "students", STUDENTS);
+//        uriMatcher.addURI(AUTHORITY, "students/#", STUDENT_ID);
+//    }
 
 
     /**
@@ -59,145 +63,167 @@ public class AppContentProvider extends ContentProvider {
 
     private SQLiteDatabase db;
 
-
-
-
-
-
-
     @Override
     public boolean onCreate() {
-        Context context = getContext();
-        DatabaseHelper dbHelper = new DatabaseHelper(context);
-
-        /**
-         * Create a write able database which will trigger its
-         * creation if it doesn't already exist.
-         */
-
-        db = dbHelper.getWritableDatabase();
-        return (db == null)? false:true;
+        return true;
     }
 
-    @Nullable
-    @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(STUDENTS_TABLE_NAME);
 
-        switch (uriMatcher.match(uri)) {
-            case STUDENTS:
-                qb.setProjectionMap(STUDENTS_PROJECTION_MAP);
-                break;
-
-            case STUDENT_ID:
-                qb.appendWhere( _ID + "=" + uri.getPathSegments().get(1));
-                break;
-
-            default:
-        }
-
-        if (sortOrder == null || sortOrder == ""){
-            /**
-             * By default sort on student names
-             */
-            sortOrder = NAME;
-        }
-
-        Cursor c = qb.query(db,	projection,	selection,
-                selectionArgs,null, null, sortOrder);
-        /**
-         * register to watch a content URI for changes
-         */
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-        return c;
-    }
-
-    @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        switch (uriMatcher.match(uri)){
-            /**
-             * Get all student records
-             */
-            case STUDENTS:
-                return "vnd.android.cursor.dir/vnd.example.students";
-            /**
-             * Get a particular student
-             */
-            case STUDENT_ID:
-                return "vnd.android.cursor.item/vnd.example.students";
+        final int match = uriMatcher.match(uri);
+        switch (match){
+            case USER_ALL:
+                return "vnd.android.cursor.dir/"+AUTHORITY+".userInfo";
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
     }
 
+
+
     @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        /**
-         * Add a new student record
-         */
-        long rowID = db.insert(	STUDENTS_TABLE_NAME, "", values);
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+        SQLiteDatabase db = getInstance(getContext()).getReadableDatabase();
+        Cursor retCursor;
 
-        /**
-         * If record is added successfully
-         */
-        if (rowID > 0) {
-            Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-            getContext().getContentResolver().notifyChange(_uri, null);
-            return _uri;
-        }
-
-        throw new SQLException("Failed to add a record into " + uri);
-    }
-
-    @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-
-        int count = 0;
-        switch (uriMatcher.match(uri)){
-            case STUDENTS:
-                count = db.delete(STUDENTS_TABLE_NAME, selection, selectionArgs);
-                break;
-
-            case STUDENT_ID:
-                String id = uri.getPathSegments().get(1);
-                count = db.delete( STUDENTS_TABLE_NAME, _ID +  " = " + id +
-                                (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), selectionArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-        }
-
-        getContext().getContentResolver().notifyChange(uri, null);
-        return count;
-    }
-
-    @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int count = 0;
         switch (uriMatcher.match(uri)) {
-            case STUDENTS:
-                count = db.update(STUDENTS_TABLE_NAME, values, selection, selectionArgs);
+            case USER_ALL: {
+                retCursor = db.query(
+                        TABLE_NAME,
+                        projection, selection, selectionArgs, null, null, sortOrder
+                );
                 break;
-
-            case STUDENT_ID:
-                count = db.update(STUDENTS_TABLE_NAME, values,
-                        _ID + " = " + uri.getPathSegments().get(1) +
-                                (!TextUtils.isEmpty(selection) ? " AND (" +selection + ')' : ""), selectionArgs);
-                break;
+            }
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri );
+                throw new UnsupportedOperationException("Unknown Uri : " + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
-        return count;
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return retCursor;
     }
+
+
 
 
     @Override
-    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        return super.bulkInsert(uri, values);
+    public Uri insert(Uri uri, ContentValues contentValues) {
+        SQLiteDatabase db = getInstance(getContext()).getWritableDatabase();
+        Uri retUri;
+
+        contentValues.put(BaseDbHandler.COL_CREATED_AT, DateTimeUtil.getNowDateTime());
+        contentValues.put(BaseDbHandler.COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
+
+
+        switch (uriMatcher.match(uri)) {
+            case USER_ALL: {
+                long insertedId = db.insert(TABLE_NAME, null, contentValues);
+
+                if (insertedId > 0)
+                    retUri = ContentUris.withAppendedId(AppContentProvider.URI_USERINFO, insertedId);
+                else
+                    throw new SQLException("Failed to insert row : " + uri);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown Uri : " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(retUri, null);
+        return retUri;
     }
+
+
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        SQLiteDatabase db = getInstance(getContext()).getWritableDatabase();
+        int rowDeleted;
+
+        switch (uriMatcher.match(uri)) {
+            case USER_ALL: {
+                rowDeleted = db.delete(
+                        TABLE_NAME,
+                        selection, selectionArgs
+                );
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown Uri : " + uri);
+        }
+
+        if (selection == null || rowDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowDeleted;
+    }
+
+
+
+
+    @Override
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+
+        SQLiteDatabase db = getInstance(getContext()).getWritableDatabase();
+        String tableName = "";
+        // row updated count
+        int updateCount = 0;
+
+        contentValues.put(BaseDbHandler.COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
+
+        switch (uriMatcher.match(uri)) {
+            case USER_ALL: {
+                tableName = UserInfoDbHandler.TABLE_NAME;
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown Uri : " + uri);
+        }
+
+        try {
+            updateCount = db.update(tableName, contentValues, selection, selectionArgs);
+        } catch (Exception e) {
+
+        }
+
+        if (updateCount > 0)
+            getContext().getContentResolver().notifyChange(uri, null);
+
+        return updateCount;
+    }
+
+
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+
+        SQLiteDatabase db = getInstance(getContext()).getWritableDatabase();
+
+        switch (uriMatcher.match(uri)) {
+            case USER_ALL: {
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = UserInfoDbHandler.getInstance(getContext()).insertOrUpdate(value);
+                        if (-1 != _id)
+                            returnCount++;
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            }
+
+            default:
+                return super.bulkInsert(uri, values);
+        }
+    }
+
+
 }

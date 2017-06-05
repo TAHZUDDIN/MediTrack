@@ -31,7 +31,7 @@
 
 
             <EditText
-                android:id="@+id/username"
+                android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="text"
@@ -44,7 +44,7 @@
 
             <EditText
                 android:layout_marginTop="10dp"
-                android:id="@+id/age"
+                android:id="@+id/user_age"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="number"
@@ -106,7 +106,7 @@
 
 
                         <EditText
-                            android:id="@+id/sosname"
+                            android:id="@+id/sos_name"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:inputType="textEmailAddress"
@@ -146,7 +146,8 @@
                         android:layout_alignParentRight="true"
                         android:background="@android:color/white"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:onClick="sosNameAndNumber"/>
 
 
                 </RelativeLayout>
