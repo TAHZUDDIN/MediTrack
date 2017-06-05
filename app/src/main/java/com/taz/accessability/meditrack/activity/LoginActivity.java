@@ -72,19 +72,19 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void NameAndAgeInput(View v){
-        if(userName.getText() != null && userAge.getText() != null){
+        if(!userName.getText().toString().equals("") && !userAge.getText().toString().equals("")){
             UserName = userName.getText().toString();
             UserAge = userAge.getText().toString();
             showSosView();
         }
         else
             Toast.makeText(this, "Name and Age is Required", Toast.LENGTH_SHORT).show();
+
     }
 
 
     public void sosNameAndNumber(View v){
-
-        if(sosName.getText() != null && sosNumber.getText() != null){
+        if(!sosName.getText().toString().equals("") && !sosNumber.getText().toString().equals("")){
             SosName = sosName.getText().toString();
             SosNumber = sosNumber.getText().toString();
 
@@ -92,8 +92,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
             Toast.makeText(this, "SOS Name and Numberis Required", Toast.LENGTH_SHORT).show();
-
-
     }
 
 

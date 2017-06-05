@@ -1,15 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:layout_centerInParent="true"/>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="8dp"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="NAME"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
 
 
-</RelativeLayout>
+                    <TextView
+                        android:id="@+id/id_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="NAME"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="AGE"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
+
+
+                    <TextView
+                        android:id="@+id/id_age"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="27"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view_addMedi"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="8dp"
+            android:layout_margin="15dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADD NEW MEDICINE"
+                    android:textColor="@android:color/black"
+                    android:layout_weight="1"
+                    android:layout_centerVertical="true"/>
+
+
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/right_arrow"/>
+
+
+
+            </RelativeLayout>
+
+         </android.support.v7.widget.CardView>
+
+
+
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view_sos"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="8dp"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="SOS NAME"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
+
+
+                    <TextView
+                        android:id="@+id/id_sos_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="SOS NUM"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="SOS NUMBER"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
+
+
+                    <TextView
+                        android:id="@+id/sos_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="27"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+        <!--User detail card (name and age) - On click of this tab, the user should be able to edit the details.-->
+
+
+        <!--Add new medicine. (Medicine that is already added should not be added again. Name and Dosage become the primary key). User should add the following details of the medicines.-->
+                <!-- - Medicine name-->
+                <!-- - Dose frequency (daily / weekly)-->
+                <!-- - Quantity (of medicine at a time)-->
+                <!-- - Number of dose per day-->
+                <!-- - Reminder settings ( set the time when the app should remind the users. If the medicine has to be taken twice a day, user should set two reminders for that medicine)-->
+                <!-- - Number of medicines purchased-->
+                <!-- - Before saving the details, show a popup asking user to check expiry date of medicine.-->
+
+
+
+        <!--SOS settings page. User will be allowed to add one number and name that will be used incase of emergency.-->
+
+
+</LinearLayout>
+
+
+

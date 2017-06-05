@@ -12,4 +12,9 @@
         android:layout_centerInParent="true"/>
 
 
+
+
+    <!--This will consist of all the medicine list that the user usually takes. User should be able to click on the item and update the medicine details. There must be a "Search bar" in the action bar for this tab. Note that the search bar should not available in other tabs.-->
+
+
 </RelativeLayout>

@@ -36,7 +36,7 @@
                 android:layout_height="50dp"
                 android:inputType="text"
                 android:hint="Name"
-                android:paddingLeft="6dp"
+                android:paddingLeft="10dp"
                 android:textColor="@color/colorPrimary"
                 android:background="@android:color/white"/>
 
@@ -49,7 +49,7 @@
                 android:layout_height="50dp"
                 android:inputType="number"
                 android:hint="Age"
-                android:paddingLeft="6dp"
+                android:paddingLeft="10dp"
                 android:textColor="@color/colorPrimary"
                 android:background="@android:color/white"/>
 
@@ -111,7 +111,7 @@
                             android:layout_height="50dp"
                             android:inputType="textEmailAddress"
                             android:hint="SOS Name"
-                            android:paddingLeft="6dp"
+                            android:paddingLeft="10dp"
                             android:textColor="@color/colorPrimary"
                             android:background="@android:color/white"/>
 
@@ -124,7 +124,7 @@
                             android:layout_height="50dp"
                             android:inputType="number"
                             android:hint="SOS Number"
-                            android:paddingLeft="6dp"
+                            android:paddingLeft="10dp"
                             android:textColor="@color/colorPrimary"
                             android:background="@android:color/white"/>
 
