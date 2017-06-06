@@ -6,6 +6,10 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
@@ -15,21 +19,20 @@ import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.fragment.FragmentAll;
 import com.taz.accessability.meditrack.fragment.FragmentSettings;
 import com.taz.accessability.meditrack.fragment.FragmentToday;
+import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 import com.taz.accessability.meditrack.util.Util;
 
 import static com.taz.accessability.meditrack.R.id.textView1;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-    String Fragment_Today = "FragmentToday";
-    String Fragment_All = "FragmentAll";
-    String Fragment_Settings = "FragmentSettings";
     BottomBar bottomBar;
     boolean BackButtonPressed = false;
     TextView textViewToolbarTitle;
     String toolbarTitle = Constants.TODAYS_MEDICINES;
     FragmentSettings fragmentSettings;
+    TextView textView_button_sos_main;
+    Toolbar toolbar ;
 
 
 
@@ -38,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
 
+        textView_button_sos_main = (TextView)findViewById(R.id.is_button_sos_main);
+        textView_button_sos_main.setOnClickListener(this);
+        startAnimationButton();
+        
         textViewToolbarTitle =(TextView)findViewById(R.id.id_toolbar_title);
         bottomBar = (BottomBar) findViewById(R.id.bottom_Bar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -57,15 +65,18 @@ public class MainActivity extends AppCompatActivity {
                 switch (tabId) {
                     case R.id.tab_today:
                         selectedFragment = FragmentToday.newInstance();
+                        toolbar.setVisibility(View.VISIBLE);
                         toolbarTitle = Constants.TODAYS_MEDICINES;
                         break;
                     case R.id.tab_all:
                         selectedFragment = FragmentAll.newInstance();
+                        toolbar.setVisibility(View.GONE);
                         toolbarTitle = Constants.ALL_MEDICINE;
                         break;
                     case R.id.tab_settings:
                         fragmentSettings = FragmentSettings.newInstance();
                         selectedFragment = fragmentSettings;
+                        toolbar.setVisibility(View.VISIBLE);
                         toolbarTitle = Constants.SETTINGS;
                         break;
                 }
@@ -73,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     transaction.replace(R.id.contentContainer, selectedFragment , Integer.toString(getFragmentCount())).addToBackStack(null);
                 transaction.commit();
                 textViewToolbarTitle.setText(toolbarTitle);
+
             }
         });
 
@@ -82,6 +94,17 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
         textViewToolbarTitle.setText(toolbarTitle);
 
+    }
+
+
+
+    public void startAnimationButton() {
+        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
+
+        // Use bounce interpolator with amplitude 0.2 and frequency 10
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
+        myAnim.setInterpolator(interpolator);
+        textView_button_sos_main.startAnimation(myAnim);
     }
 
 
@@ -103,14 +126,17 @@ public class MainActivity extends AppCompatActivity {
         Fragment f = getFragmentAt(getFragmentCount() - 2);
         if (f instanceof FragmentToday ){
             bottomBar.selectTabAtPosition(0);
+            toolbar.setVisibility(View.VISIBLE);
             textViewToolbarTitle.setText(Constants.TODAYS_MEDICINES);
         }
 
         else if(f instanceof FragmentAll ){
             bottomBar.selectTabAtPosition(1);
+            toolbar.setVisibility(View.GONE);
             textViewToolbarTitle.setText(Constants.ALL_MEDICINE);
         }
         else if(f instanceof FragmentSettings){
+            toolbar.setVisibility(View.VISIBLE);
             bottomBar.selectTabAtPosition(2);
             textViewToolbarTitle.setText(Constants.SETTINGS);
         }
@@ -137,6 +163,18 @@ public class MainActivity extends AppCompatActivity {
         {
             if(fragmentSettings != null)
                 fragmentSettings.UpdateUi();
+
+        }
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.is_button_sos_main:
+                Util.makeACall(MainActivity.this);
+                break;
 
         }
     }

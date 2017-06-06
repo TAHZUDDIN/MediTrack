@@ -2,6 +2,7 @@ package com.taz.accessability.meditrack.activity;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.taz.accessability.meditrack.R;
+import com.taz.accessability.meditrack.app.MyApplication;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
 import com.taz.accessability.meditrack.data.model.UserInfo;
 
@@ -29,6 +31,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Asking required Dangerous permissions
+        if (Build.VERSION.SDK_INT >= 23) {
+            MyApplication.getInstance().getInstancePermissionUtil().showPermissionIfRequired(this);
+        }
+
 
          if(checkUserInfoAvailable() != null){
              startActivity(new Intent(this,MainActivity.class));

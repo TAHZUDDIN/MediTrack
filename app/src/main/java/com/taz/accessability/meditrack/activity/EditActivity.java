@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,13 +20,14 @@ import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
 import com.taz.accessability.meditrack.data.model.UserInfo;
+import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 import com.taz.accessability.meditrack.util.Util;
 
 import org.w3c.dom.Text;
 
 import java.util.Date;
 
-public class EditActivity extends AppCompatActivity implements TextWatcher{
+public class EditActivity extends AppCompatActivity implements TextWatcher,View.OnClickListener{
 
     TextView textViewToolbarTitle;
     String toolbarTitle;
@@ -38,6 +41,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher{
                     textInputLayoutSosNumber;
 
     TextView textViewSvaeUserUpdate;
+    TextView textView_button_sos_main;
 
 
 
@@ -45,6 +49,11 @@ public class EditActivity extends AppCompatActivity implements TextWatcher{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        textView_button_sos_main = (TextView)findViewById(R.id.is_button_sos_main);
+        textView_button_sos_main.setOnClickListener(this);
+        startAnimationButton();
+
         textViewToolbarTitle =(TextView)findViewById(R.id.id_toolbar_title);
         LL_Parent_UserInfo =(LinearLayout)findViewById(R.id.id_LL_UserInfo);
         NestedScrollview_Parent_Medicine =(NestedScrollView) findViewById(R.id.id_NestedScroll_Medicine);
@@ -59,12 +68,6 @@ public class EditActivity extends AppCompatActivity implements TextWatcher{
         textViewSvaeUserUpdate.setClickable(false);
         textViewSvaeUserUpdate.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
         setTextUserInfo();
-
-
-
-
-
-
 
 
 
@@ -173,6 +176,27 @@ public class EditActivity extends AppCompatActivity implements TextWatcher{
         setResult(Constants.START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO);
         finish();
 
+    }
+
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.is_button_sos_main:
+                Util.makeACall(EditActivity.this);
+                break;
+        }
+    }
+
+
+    public void startAnimationButton() {
+        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
+
+        // Use bounce interpolator with amplitude 0.2 and frequency 10
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
+        myAnim.setInterpolator(interpolator);
+        textView_button_sos_main.startAnimation(myAnim);
     }
 
 

@@ -7,7 +7,12 @@
     android:minHeight="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    local:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+    local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    >
+
+
+
+
 
 
 
@@ -20,6 +25,21 @@
              android:layout_gravity="center"
              android:textSize="18sp"
              android:textStyle="bold"/>
+
+
+
+            <TextView
+                android:id="@+id/is_button_sos_main"
+                android:layout_width="62dp"
+                android:layout_height="52dp"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/white"
+                android:layout_gravity="right"
+                android:text="SOS"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
 
 
