@@ -280,7 +280,7 @@
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Medicine name"
+                            android:hint="Name"
                             android:inputType="text"
                             android:textColor="@color/colorPrimary" />
                     </android.support.design.widget.TextInputLayout>
@@ -295,7 +295,7 @@
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Dose frequency"
+                            android:hint="Age"
                             android:inputType="number"
                             android:textColor="@color/colorPrimary" />
                     </android.support.design.widget.TextInputLayout>
@@ -311,7 +311,7 @@
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Quantity"
+                            android:hint="Sos Name"
                             android:inputType="text"
                             android:textColor="@color/colorPrimary" />
                     </android.support.design.widget.TextInputLayout>
@@ -325,7 +325,7 @@
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Number of dose per day"
+                            android:hint="Sos Number"
                             android:inputType="number"
                             android:textColor="@color/colorPrimary" />
                     </android.support.design.widget.TextInputLayout>
@@ -333,6 +333,7 @@
 
 
                     <TextView
+                        android:id="@+id/id_textView_Save_UserUpdate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="SAVE"
@@ -340,9 +341,10 @@
                         android:padding="10dp"
                         android:gravity="center"
                         android:textColor="@android:color/black"
-                        android:onClick="PickTime"
+                        android:onClick="updateUserInfo"
                         android:background="@color/colorPrimary"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:clickable="false"/>
 
                 </LinearLayout>
 

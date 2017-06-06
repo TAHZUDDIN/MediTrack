@@ -36,7 +36,6 @@ public class FragmentSettings extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userInfo =(UserInfo) UserInfoDbHandler.getInstance(getActivity()).get();
     }
 
     @Override
@@ -44,6 +43,8 @@ public class FragmentSettings extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
+        userInfo =(UserInfo) UserInfoDbHandler.getInstance(getActivity()).get();
+
         cardViewName = (CardView)v.findViewById(R.id.id_card_view_Name);
         cardViewMedia = (CardView)v.findViewById(R.id.id_card_view_Medi);
         cardViewSos = (CardView)v.findViewById(R.id.id_card_view_sos);
@@ -99,7 +100,7 @@ public class FragmentSettings extends Fragment implements View.OnClickListener {
     public void goToEditPageEditUserInfo(){
         Intent i = new Intent(getActivity(),EditActivity.class);
         i.putExtra(Constants.EDIT_USER_INFO,Constants.EDIT_USER_INFO);
-        startActivityForResult(i, Constants.START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO);
+        getActivity().startActivityForResult(i, Constants.START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
@@ -108,10 +109,22 @@ public class FragmentSettings extends Fragment implements View.OnClickListener {
     public void goToEditPageAddMedicine(){
         Intent i = new Intent(getActivity(), EditActivity.class);
         i.putExtra(Constants.ADD_MEDI_INFO,Constants.ADD_MEDI_INFO);
-        startActivityForResult(i, Constants.START_ACTIVITY_FOR_RESULT_ADD_MEDIA_INFO);
+        getActivity().startActivityForResult(i, Constants.START_ACTIVITY_FOR_RESULT_ADD_MEDIA_INFO);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+
+
+   public void UpdateUi(){
+       userInfo =(UserInfo) UserInfoDbHandler.getInstance(getActivity()).get();
+       if(userInfo != null){
+           textViewName.setText(userInfo.getName());
+           textViewAge.setText(userInfo.getAge());
+           textViewSosNumber.setText(userInfo.getSosNumber());
+           textViewSosName.setText(userInfo.getSosName());
+       }
+
+    }
 
 
 

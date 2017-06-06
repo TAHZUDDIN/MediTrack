@@ -1,25 +1,43 @@
 package com.taz.accessability.meditrack.activity;
 
+import android.content.ContentValues;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.constants.Constants;
+import com.taz.accessability.meditrack.data.UserInfoDbHandler;
+import com.taz.accessability.meditrack.data.model.UserInfo;
+import com.taz.accessability.meditrack.util.Util;
+
+import org.w3c.dom.Text;
 
 import java.util.Date;
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity implements TextWatcher{
 
     TextView textViewToolbarTitle;
     String toolbarTitle;
     LinearLayout LL_Parent_UserInfo;
     NestedScrollView NestedScrollview_Parent_Medicine;
+
+    UserInfo userInfo;
+    TextInputLayout textInputLayoutName,
+                    textInputLayoutAge,
+                    textInputLayoutSosName,
+                    textInputLayoutSosNumber;
+
+    TextView textViewSvaeUserUpdate;
 
 
 
@@ -32,6 +50,25 @@ public class EditActivity extends AppCompatActivity {
         NestedScrollview_Parent_Medicine =(NestedScrollView) findViewById(R.id.id_NestedScroll_Medicine);
         setViewType();
 
+        userInfo =(UserInfo) UserInfoDbHandler.getInstance(this).get();
+        textInputLayoutName = (TextInputLayout)findViewById(R.id.id_text_input_Name);
+        textInputLayoutAge = (TextInputLayout)findViewById(R.id.id_text_input_Age);
+        textInputLayoutSosName = (TextInputLayout)findViewById(R.id.id_text_input_sosName);
+        textInputLayoutSosNumber = (TextInputLayout)findViewById(R.id.id_text_input_sosNumber);
+        textViewSvaeUserUpdate = (TextView)findViewById(R.id.id_textView_Save_UserUpdate);
+        textViewSvaeUserUpdate.setClickable(false);
+        textViewSvaeUserUpdate.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+        setTextUserInfo();
+
+
+
+
+
+
+
+
+
+
 
         MaterialSpinner spinner = (MaterialSpinner) findViewById(R.id.spinner);
         spinner.setItems("daily", "weekly");
@@ -43,6 +80,26 @@ public class EditActivity extends AppCompatActivity {
         });
 
     }
+
+
+
+    private void setTextUserInfo() {
+        if(userInfo != null){
+            textInputLayoutName.getEditText().setText(userInfo.getName());
+            textInputLayoutAge.getEditText().setText(userInfo.getAge());
+            textInputLayoutSosName.getEditText().setText(userInfo.getSosName());
+            textInputLayoutSosNumber.getEditText().setText(userInfo.getSosNumber());
+
+            textInputLayoutName.getEditText().addTextChangedListener(this);
+            textInputLayoutAge.getEditText().addTextChangedListener(this);
+            textInputLayoutSosName.getEditText().addTextChangedListener(this);
+            textInputLayoutSosNumber.getEditText().addTextChangedListener(this);
+
+        }
+    }
+
+
+
 
     private void setViewType() {
 
@@ -97,6 +154,43 @@ public class EditActivity extends AppCompatActivity {
 
                     }
                 }).display();
+
+    }
+
+
+    public void updateUserInfo(View v){
+
+        ContentValues values = new ContentValues();
+        values.put(UserInfoDbHandler.COL_NAME, textInputLayoutName.getEditText().getText().toString());
+        values.put(UserInfoDbHandler.COL_AGE, textInputLayoutAge.getEditText().getText().toString());
+        values.put(UserInfoDbHandler.COL_SOSNAME, textInputLayoutSosName.getEditText().getText().toString());
+        values.put(UserInfoDbHandler.COL_SOS_NUMBER, textInputLayoutSosNumber.getEditText().getText().toString());
+
+        UserInfoDbHandler.getInstance(this).insertOrUpdate(values);
+
+        Util.ToastDisplay(this, "Updated user info");
+
+        setResult(Constants.START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO);
+        finish();
+
+    }
+
+
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        textViewSvaeUserUpdate.setClickable(true);
+        textViewSvaeUserUpdate.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
 
     }
 }

@@ -1,5 +1,6 @@
 package com.taz.accessability.meditrack.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,9 @@ import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.fragment.FragmentAll;
 import com.taz.accessability.meditrack.fragment.FragmentSettings;
 import com.taz.accessability.meditrack.fragment.FragmentToday;
+import com.taz.accessability.meditrack.util.Util;
+
+import static com.taz.accessability.meditrack.R.id.textView1;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     boolean BackButtonPressed = false;
     TextView textViewToolbarTitle;
     String toolbarTitle = Constants.TODAYS_MEDICINES;
+    FragmentSettings fragmentSettings;
 
 
 
@@ -59,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
                         toolbarTitle = Constants.ALL_MEDICINE;
                         break;
                     case R.id.tab_settings:
-                        selectedFragment = FragmentSettings.newInstance();
+                        fragmentSettings = FragmentSettings.newInstance();
+                        selectedFragment = fragmentSettings;
                         toolbarTitle = Constants.SETTINGS;
                         break;
                 }
@@ -118,5 +124,20 @@ public class MainActivity extends AppCompatActivity {
     }
     protected int getFragmentCount() {
         return getSupportFragmentManager().getBackStackEntryCount();
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode== Constants.START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO)
+        {
+            if(fragmentSettings != null)
+                fragmentSettings.UpdateUi();
+
+        }
     }
 }
