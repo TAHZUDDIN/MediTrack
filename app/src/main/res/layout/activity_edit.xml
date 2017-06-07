@@ -259,6 +259,11 @@
                             app:picker_curved="true"
                             app:picker_cyclic="false"
                             app:picker_visibleItemCount="3"
+                            app:picker_displayDays="false"
+                            app:picker_displayHours="true"
+                            app:picker_displayMinutes="true"
+                            app:picker_selectedTextColor="@color/colorPrimary"
+                            app:picker_textSize="13sp"
                             android:layout_marginTop="5dp"
                             />
 
