@@ -36,7 +36,15 @@ public class AppContentProvider extends ContentProvider {
     private static final String SCHEME = "content://";
     private final static String USERINFO_SCHEMA = SCHEME + AUTHORITY + "/userInfo";
     public final static Uri URI_USERINFO = Uri.parse(USERINFO_SCHEMA);
+    private final static String MEDICINE_SCHEMA = SCHEME + AUTHORITY + "/medicine";
+    public final static Uri URI_MEDICINE = Uri.parse(MEDICINE_SCHEMA);
+    private final static String DOSE_SCHEMA = SCHEME + AUTHORITY + "/dose";
+    public final static Uri URI_DOSE = Uri.parse(DOSE_SCHEMA);
     private final int USER_ALL = 1;
+    private final int MEDICINE_ALL = 2;
+    private final int MEDICINE_SINGLE = 3;
+    private final int DOSE_ALL = 4;
+    private final int DOSE_SINGLE = 5;
 
     private final UriMatcher uriMatcher = buildUriMatcher();
     private String TAG = AppContentProvider.class.getSimpleName();
@@ -45,16 +53,12 @@ public class AppContentProvider extends ContentProvider {
     private UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(AUTHORITY, "userInfo", USER_ALL);
+        uriMatcher.addURI(AUTHORITY, "medicine", MEDICINE_ALL);
+        uriMatcher.addURI(AUTHORITY, "medicine/#", MEDICINE_SINGLE);
+        uriMatcher.addURI(AUTHORITY, "dose", DOSE_ALL);
+        uriMatcher.addURI(AUTHORITY, "dose/#", DOSE_SINGLE);
         return uriMatcher;
     }
-
-
-//    static final UriMatcher uriMatcher;
-//    static{
-//        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-//        uriMatcher.addURI(AUTHORITY, "students", STUDENTS);
-//        uriMatcher.addURI(AUTHORITY, "students/#", STUDENT_ID);
-//    }
 
 
     /**
@@ -75,6 +79,14 @@ public class AppContentProvider extends ContentProvider {
         switch (match){
             case USER_ALL:
                 return "vnd.android.cursor.dir/"+AUTHORITY+".userInfo";
+            case MEDICINE_ALL:
+                return "vnd.android.cursor.dir/"+AUTHORITY+".medicine";
+            case MEDICINE_SINGLE:
+                return "vnd.android.cursor.item/" + AUTHORITY + ".medicine";
+            case DOSE_ALL:
+                return "vnd.android.cursor.dir/"+AUTHORITY+".dose";
+            case DOSE_SINGLE:
+                return "vnd.android.cursor.item/" + AUTHORITY + ".dose";
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -96,6 +108,44 @@ public class AppContentProvider extends ContentProvider {
                 );
                 break;
             }
+            case MEDICINE_ALL: {
+                retCursor = db.query(
+                        MedicinesDbHandler.TABLE_NAME,
+                        projection, selection, selectionArgs, null, null, sortOrder
+                );
+                break;
+            }
+
+            case MEDICINE_SINGLE: {
+                String itemId = uri.getPathSegments().get(1);
+
+                retCursor = db.query(
+                        MedicinesDbHandler.TABLE_NAME,
+                        projection,
+                        MedicinesDbHandler.COL_ID + " = " + itemId,
+                        null, null, null, null
+                );
+                break;
+            }
+            case DOSE_ALL: {
+                retCursor = db.query(
+                        TimeOfDoseDbHandler.TABLE_NAME,
+                        projection, selection, selectionArgs, null, null, sortOrder
+                );
+                break;
+            }
+            case DOSE_SINGLE: {
+                String itemId = uri.getPathSegments().get(1);
+
+                retCursor = db.query(
+                        TimeOfDoseDbHandler.TABLE_NAME,
+                        projection,
+                        TimeOfDoseDbHandler.COL_ID + " = " + itemId,
+                        null, null, null, null
+                );
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown Uri : " + uri);
         }

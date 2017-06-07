@@ -34,6 +34,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(UserInfoDbHandler.CREATE_TABLE);
+        db.execSQL(MedicinesDbHandler.CREATE_TABLE);
+        db.execSQL(TimeOfDoseDbHandler.CREATE_TABLE);
     }
 
     @Override
@@ -42,6 +44,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db = this.getWritableDatabase();
         }
         db.execSQL("DROP TABLE IF EXISTS " + UserInfoDbHandler.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + MedicinesDbHandler.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TimeOfDoseDbHandler.TABLE_NAME);
         onCreate(db);
     }
 }
