@@ -176,6 +176,17 @@ public class AppContentProvider extends ContentProvider {
                     throw new SQLException("Failed to insert row : " + uri);
                 break;
             }
+
+            case DOSE_ALL: {
+                long insertedId = db.insert(TimeOfDoseDbHandler.TABLE_NAME, null, contentValues);
+
+                if (insertedId > 0)
+                    retUri = ContentUris.withAppendedId(AppContentProvider.URI_DOSE, insertedId);
+                else
+                    throw new SQLException("Failed to insert row : " + uri);
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown Uri : " + uri);
         }

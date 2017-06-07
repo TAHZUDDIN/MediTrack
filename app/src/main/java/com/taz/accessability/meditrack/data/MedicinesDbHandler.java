@@ -11,6 +11,7 @@ import com.taz.accessability.meditrack.data.model.BaseModel;
 import com.taz.accessability.meditrack.data.model.Medicines;
 import com.taz.accessability.meditrack.data.model.TimeOfDoses;
 import com.taz.accessability.meditrack.util.DateTimeUtil;
+import com.taz.accessability.meditrack.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,10 +96,22 @@ public class MedicinesDbHandler extends BaseDbHandler{
         return medicines;
     }
 
+
     @Override
     public BaseModel get() {
         return null;
     }
+
+
+//    Cursor cursor = context.getContentResolver().query(
+//            AppContentProvider.URI_TASK, FIELDS,
+//            COL_STATUS + " = " + Task.STATUS_NEW_TASK + " AND ( " + COL_TYPE + " = " + Task.TYPE_INSTALL + " OR " + COL_TYPE + " = " + Task.TYPE_AFFILIATE_INSTALL + " )",
+//            null, null
+
+
+
+
+
 
     public List<TimeOfDoses> getTimeOfDoses(long id) {
         Cursor cursor = context.getContentResolver().query(
@@ -155,8 +168,52 @@ public class MedicinesDbHandler extends BaseDbHandler{
     }
 
 
+
+
+    // Get Medicine by name and doses , which is unique identifier
+    public BaseModel get(String name, String doses) {
+        Cursor cursor = context.getContentResolver().query(
+                AppContentProvider.URI_MEDICINE, null, COL_NAME + " = '"+name+"' AND "+COL_DOS_QUANTITY+" = "+doses+"", null, null
+        );
+
+        Medicines medicines = null;
+
+        if ((cursor.moveToFirst()) && cursor.getCount() != 0) {
+            //cursor is not empty
+            medicines = new Medicines(cursor);
+        }
+
+        cursor.close();
+        return medicines;
+    }
+
+
+
+
+    public long insert(ContentValues value) {
+        Medicines medicines = (Medicines) get(value.getAsString(COL_NAME), value.getAsString(COL_DOS_QUANTITY));
+        if (medicines != null) {
+            Util.ToastDisplay(context,"Already added");
+            return 5;
+        } else {
+            // insert new offer
+            value.put(COL_CREATED_AT, DateTimeUtil.getNowDateTime());
+            value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
+
+
+            Util.ToastDisplay(context,"Insert Values");
+
+            return DatabaseHandler.getInstance(context).getWritableDatabase().insert(MedicinesDbHandler.TABLE_NAME, null, value);
+        }
+    }
+
+
+
+
+
+
     public long insertOrUpdate(ContentValues value) {
-        Medicines medicines = (Medicines) get(value.getAsLong(COL_ID));
+        Medicines medicines = (Medicines) get(value.getAsString(COL_NAME), value.getAsString(COL_DOS_QUANTITY));
         if (medicines != null) {
             //update existing offer
             if (value.containsKey(COL_ID))

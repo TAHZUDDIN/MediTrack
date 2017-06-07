@@ -11,6 +11,7 @@ import com.taz.accessability.meditrack.data.model.BaseModel;
 import com.taz.accessability.meditrack.data.model.Medicines;
 import com.taz.accessability.meditrack.data.model.TimeOfDoses;
 import com.taz.accessability.meditrack.util.DateTimeUtil;
+import com.taz.accessability.meditrack.util.Util;
 
 import java.util.List;
 
@@ -119,6 +120,13 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
         );
     }
 
+//    public void insert(ContentValues contentValues) {
+//        context.getContentResolver().insert(
+//                AppContentProvider.URI_DOSE, contentValues
+//        );
+//    }
+
+
     @Override
     public void update(BaseModel model) {
         context.getContentResolver().update(
@@ -203,6 +211,45 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
 //                buildUri(id), values, null, null
 //        );
 //    }
+
+    // Get Medicine by name and doses , which is unique identifier
+    public BaseModel get(long medicinid, String time) {
+        Cursor cursor = context.getContentResolver().query(
+                AppContentProvider.URI_DOSE, null, COL_MEDICINE_ID + " = "+ medicinid + " AND "+COL_DODE_TIME+" = "+time+"", null, null
+        );
+
+        TimeOfDoses timeOfDoses = null;
+
+        if ((cursor.moveToFirst()) && cursor.getCount() != 0) {
+            //cursor is not empty
+            timeOfDoses = new TimeOfDoses(cursor);
+        }
+
+        cursor.close();
+        return timeOfDoses;
+    }
+
+
+
+
+
+
+    public long insert(ContentValues value) {
+//        TimeOfDoses timeOfDoses = (TimeOfDoses) get(value.getAsLong(COL_MEDICINE_ID), value.getAsString(COL_DODE_TIME));
+//        if (timeOfDoses != null) {
+//            Util.ToastDisplay(context,"Already added");
+//            return 5;
+//        } else {
+            // insert new offer
+            value.put(COL_CREATED_AT, DateTimeUtil.getNowDateTime());
+            value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
+
+
+            Util.ToastDisplay(context,"Insert Values DOSE");
+
+            return DatabaseHandler.getInstance(context).getWritableDatabase().insert(TimeOfDoseDbHandler.TABLE_NAME, null, value);
+//        }
+    }
 
 
 

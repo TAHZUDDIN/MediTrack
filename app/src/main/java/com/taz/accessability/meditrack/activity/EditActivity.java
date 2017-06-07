@@ -12,25 +12,27 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
-import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shawnlin.numberpicker.NumberPicker;
 import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.constants.Constants;
+import com.taz.accessability.meditrack.data.MedicinesDbHandler;
+import com.taz.accessability.meditrack.data.TimeOfDoseDbHandler;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
 import com.taz.accessability.meditrack.data.model.UserInfo;
 import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 import com.taz.accessability.meditrack.util.Util;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import org.w3c.dom.Text;
+import java.util.Calendar;
 
-import java.util.Date;
+import static com.taz.accessability.meditrack.R.id.id_textView_PickTime_one;
 
 
-public class EditActivity extends AppCompatActivity implements TextWatcher,View.OnClickListener,NumberPicker.OnValueChangeListener{
+public class EditActivity extends AppCompatActivity implements TextWatcher,
+        View.OnClickListener,NumberPicker.OnValueChangeListener{
 
     TextView textViewToolbarTitle;
     String toolbarTitle;
@@ -62,6 +64,21 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
             singleDateAndTimePickerTwo,
             singleDateAndTimePickerThree;
 
+    TextView textViewSaveMedicine;
+
+    TextInputLayout textInputLayoutMedicineName;
+
+    String MedicineName;
+    String doseTimeOne,
+            doseTimeTwo,
+            doseTimeThree;
+
+    int saveConditions = 0;
+    String dosesPerDay;
+    String quantity_atatime;
+    String medicinesPurchased;
+    String diseFrequency;
+
 
 
 
@@ -70,6 +87,13 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
+        textViewSaveMedicine = (TextView)findViewById(R.id.id_TV_save_Medicine);
+//        textViewSaveMedicine.setClickable(false);
+        textViewSaveMedicine.setOnClickListener(this);
+
+
+        textInputLayoutMedicineName=(TextInputLayout)findViewById(R.id.id_medicine_name_text_input);
+
 
         numberPickerQuantityAtaTime =(NumberPicker)findViewById(R.id.id_number_picker_qty_ata_time);
         numberPickerDosesPerDay =(NumberPicker)findViewById(R.id.id_number_picker_dosePerDay);
@@ -77,17 +101,17 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
         numberPickerMedicinesPurchased =(NumberPicker)findViewById(R.id.id_number_picker_medicesPurchaded);
 
 
-        singleDateAndTimePickerOne = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_one);
-        singleDateAndTimePickerTwo = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_two);
-        singleDateAndTimePickerThree = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_three);
+//        singleDateAndTimePickerOne = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_one);
+//        singleDateAndTimePickerTwo = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_two);
+//        singleDateAndTimePickerThree = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_three);
 
 
-//        textViewPickTimeOne = (TextView)findViewById(R.id.id_textView_PickTime_one);
-//        textViewPickTimeOne.setOnClickListener(this);
-//        textViewPickTimeTwo = (TextView)findViewById(R.id.id_textView_PickTime_Two);
-//        textViewPickTimeTwo.setOnClickListener(this);
-//        textViewPickTimeThree = (TextView)findViewById(R.id.id_textView_PickTime_Three);
-//        textViewPickTimeThree.setOnClickListener(this);
+        textViewPickTimeOne = (TextView)findViewById(id_textView_PickTime_one);
+        textViewPickTimeOne.setOnClickListener(this);
+        textViewPickTimeTwo = (TextView)findViewById(R.id.id_textView_PickTime_Two);
+        textViewPickTimeTwo.setOnClickListener(this);
+        textViewPickTimeThree = (TextView)findViewById(R.id.id_textView_PickTime_Three);
+        textViewPickTimeThree.setOnClickListener(this);
 
 
 
@@ -108,7 +132,6 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
         textInputLayoutSosNumber = (TextInputLayout)findViewById(R.id.id_text_input_sosNumber);
         textViewSvaeUserUpdate = (TextView)findViewById(R.id.id_textView_Save_UserUpdate);
         textViewSvaeUserUpdate.setClickable(false);
-        textViewSvaeUserUpdate.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
         setTextUserInfo();
 
 
@@ -123,6 +146,9 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
 //                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
             }
         });
+
+
+        showHideTimePicker(1);
 
     }
 
@@ -182,25 +208,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
     }
 
 
-    public void PickTime(View v){
 
-        new SingleDateAndTimePickerDialog.Builder(this)
-                //.bottomSheet()
-                //.curved()
-                //.minutesStep(15)
-
-                //.displayHours(false)
-                //.displayMinutes(false)
-
-                .title("Set Time")
-                .listener(new SingleDateAndTimePickerDialog.Listener() {
-                    @Override
-                    public void onDateSelected(Date date) {
-
-                    }
-                }).display();
-
-    }
 
 
     public void updateUserInfo(View v){
@@ -229,22 +237,30 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
                 Util.makeACall(EditActivity.this);
                 break;
 
-//            case R.id.id_textView_PickTime_one:
-//
-//                break;
-//
-//            case R.id.id_textView_PickTime_Two:
-//                break;
-//
-//            case R.id.id_textView_PickTime_Three:
-//                break;
+            case R.id.id_textView_PickTime_one:
+                showTimePopUp("one");
+
+                break;
+
+            case R.id.id_textView_PickTime_Two:
+                showTimePopUp("two");
+                break;
+
+            case R.id.id_textView_PickTime_Three:
+                showTimePopUp("three");
+                break;
+
+            case R.id.id_TV_save_Medicine:
+                saveMedicine();
+                break;
         }
     }
 
 
+
+
     public void startAnimationButton() {
         final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
-
         // Use bounce interpolator with amplitude 0.2 and frequency 10
         MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
         myAnim.setInterpolator(interpolator);
@@ -261,8 +277,6 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         textViewSvaeUserUpdate.setClickable(true);
-        textViewSvaeUserUpdate.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
     }
 
     @Override
@@ -274,7 +288,6 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        Toast.makeText(this, "New Value "+newVal+" Spinner "+spinner.getText(),Toast.LENGTH_SHORT).show();
         showHideTimePicker(newVal);
     }
 
@@ -284,21 +297,124 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
 
         switch (newVl_number_Picker){
             case  1:
-                singleDateAndTimePickerOne.setVisibility(View.VISIBLE);
-                singleDateAndTimePickerTwo.setVisibility(View.GONE);
-                singleDateAndTimePickerThree.setVisibility(View.GONE);
+                textViewPickTimeOne.setVisibility(View.VISIBLE);
+                textViewPickTimeTwo.setVisibility(View.GONE);
+                textViewPickTimeThree.setVisibility(View.GONE);
                 break;
             case  2:
-                singleDateAndTimePickerOne.setVisibility(View.VISIBLE);
-                singleDateAndTimePickerTwo.setVisibility(View.VISIBLE);
-                singleDateAndTimePickerThree.setVisibility(View.GONE);
+                textViewPickTimeOne.setVisibility(View.VISIBLE);
+                textViewPickTimeTwo.setVisibility(View.VISIBLE);
+                textViewPickTimeThree.setVisibility(View.GONE);
                 break;
             case  3:
-                singleDateAndTimePickerOne.setVisibility(View.VISIBLE);
-                singleDateAndTimePickerTwo.setVisibility(View.VISIBLE);
-                singleDateAndTimePickerThree.setVisibility(View.VISIBLE);
+                textViewPickTimeOne.setVisibility(View.VISIBLE);
+                textViewPickTimeTwo.setVisibility(View.VISIBLE);
+                textViewPickTimeThree.setVisibility(View.VISIBLE);
                 break;
         }
+
+    }
+
+
+
+    public void showTimePopUp(final String timeOrder){
+
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                        if(timeOrder.equals("one"))
+                            textViewPickTimeOne.setText(hourOfDay+":"+minute);
+                        if(timeOrder.equals("two"))
+                            textViewPickTimeTwo.setText(hourOfDay+":"+minute);
+                        if(timeOrder.equals("three"))
+                            textViewPickTimeThree.setText(hourOfDay+":"+minute);
+
+                    }
+                },
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                true
+        );
+        tpd.show(getFragmentManager(),"TimePickerDialog");
+    }
+
+
+
+    public void saveMedicine(){
+        doseTimeOne = textViewPickTimeOne.getText().toString();
+        doseTimeTwo = textViewPickTimeTwo.getText().toString();
+        doseTimeThree = textViewPickTimeThree.getText().toString();
+        MedicineName = textInputLayoutMedicineName.getEditText().getText().toString();
+
+        switch (numberPickerDosesPerDay.getValue()){
+
+            case 1:
+                if(!MedicineName.equals("") && !doseTimeOne.equals("Pick Time First"))
+                    Save(1);
+               break;
+            case 2:
+                if(!MedicineName.equals("")  && !doseTimeOne.equals("Pick Time First") && !doseTimeTwo.equals("Pick Time Second"))
+                    Save(2);
+                break;
+
+            case 3:
+                if(!MedicineName.equals("")  && !doseTimeOne.equals("Pick Time First") && !doseTimeTwo.equals("Pick Time Second")&&
+                        !doseTimeThree.equals("Pick Time Third"))
+                    Save(3);
+                break;
+        }
+    }
+
+
+
+    public void Save(int condition){
+
+
+
+        MedicineName = textInputLayoutMedicineName.getEditText().getText().toString();
+        dosesPerDay= String.valueOf(numberPickerDosesPerDay.getValue());
+        quantity_atatime = String.valueOf(numberPickerQuantityAtaTime.getValue());
+        medicinesPurchased = String.valueOf(numberPickerMedicinesPurchased.getValue());
+        diseFrequency = spinner.getText().toString();
+
+
+        ContentValues values = new ContentValues();
+        values.put(MedicinesDbHandler.COL_NAME, MedicineName);
+        values.put(MedicinesDbHandler.COL_DOS_FREQUENCY, diseFrequency);
+        values.put(MedicinesDbHandler.COL_DOS_QUANTITY, quantity_atatime);
+        values.put(MedicinesDbHandler.COL_DOSES_PERDAY, dosesPerDay);
+        values.put(MedicinesDbHandler.COL_NUMBER_PURCHASED, medicinesPurchased);
+
+        long returnValue =MedicinesDbHandler.getInstance(this).insert(values);
+        Util.ToastDisplay(this, "returnValue "+returnValue);
+        if(returnValue != 5 && returnValue != -1)
+            switch (condition){
+                case 1:
+                    ContentValues cv = getContentValuesTimeOfDose(returnValue,doseTimeOne);
+                    long returnTimeDb =TimeOfDoseDbHandler.getInstance(this).insert(cv);
+
+//                    TimeOfDoses timeOfDoses = new TimeOfDoses();
+//                    timeOfDoses.setDosetime(doseTimeOne);
+//                    timeOfDoses.setMedicineId(returnValue);
+//                    TimeOfDoseDbHandler.getInstance(this).insert(timeOfDoses);
+
+//                    Util.ToastDisplay(this, "returnValue DOSE "+returnValue);
+                    break;
+
+            }
+
+    }
+
+
+
+    public ContentValues getContentValuesTimeOfDose(long medicineId, String doseTime){
+
+        ContentValues values = new ContentValues();
+        values.put(TimeOfDoseDbHandler.COL_MEDICINE_ID, medicineId);
+        values.put(TimeOfDoseDbHandler.COL_DODE_TIME, doseTime);
+        return values;
 
     }
 

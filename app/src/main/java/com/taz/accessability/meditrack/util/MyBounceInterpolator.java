@@ -6,7 +6,7 @@ package com.taz.accessability.meditrack.util;
 
 public class MyBounceInterpolator implements android.view.animation.Interpolator {
     double mAmplitude = 1;
-    double mFrequency = 10;
+    double mFrequency = 5;
 
     public MyBounceInterpolator(double amplitude, double frequency) {
         mAmplitude = amplitude;
