@@ -102,7 +102,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
 
     public List<TimeOfDoses> getTimeOfDoses(long id) {
         Cursor cursor = context.getContentResolver().query(
-                AppContentProvider.URI_DOSE, null, TimeOfDoseDbHandler.COL_MEDICINE_ID + " = " + id, null, TimeOfDoseDbHandler.COL_ORDER + " ASC, " + TimeOfDoseDbHandler.COL_TYPE + " ASC"
+                AppContentProvider.URI_DOSE, null, TimeOfDoseDbHandler.COL_MEDICINE_ID + " = " + id, null, TimeOfDoseDbHandler.COL_ORDER + " ASC, "
         );
 
         List<TimeOfDoses> timeOfDoses = new ArrayList<>();

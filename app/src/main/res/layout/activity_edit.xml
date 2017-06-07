@@ -208,7 +208,7 @@
                             android:layout_marginTop="20dp"
                             android:padding="10dp"
                             android:gravity="center"
-                            android:textColor="@android:color/black"
+                            android:textColor="@android:color/white"
                             android:onClick="PickTime"
                             android:background="@android:color/holo_blue_light"
                             android:textSize="18sp"/>
@@ -223,7 +223,7 @@
                             android:layout_marginTop="20dp"
                             android:padding="10dp"
                             android:gravity="center"
-                            android:textColor="@android:color/black"
+                            android:textColor="@android:color/white"
                             android:onClick="PickTime"
                             android:background="@color/colorPrimary"
                             android:textSize="18sp"/>

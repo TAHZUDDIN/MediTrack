@@ -14,11 +14,6 @@ import com.taz.accessability.meditrack.util.DateTimeUtil;
 
 import java.util.List;
 
-import static com.taz.accessability.meditrack.data.BaseDbHandler.COL_CREATED_AT;
-import static com.taz.accessability.meditrack.data.BaseDbHandler.COL_ID;
-import static com.taz.accessability.meditrack.data.BaseDbHandler.COL_UPDATED_AT;
-import static com.taz.accessability.meditrack.data.UserInfoDbHandler.COL_NAME;
-
 /**
  * Created by tahzuddin on 6/6/17.
  */
@@ -30,7 +25,7 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
     public static final String COL_MEDICINE_ID = "medicine_id";
     public static final String COL_DODE_TIME = "dose_time";
     public static final String COL_ORDER = "_order";
-    public static final String COL_TYPE = "type";
+//    public static final String COL_TYPE = "type";
 
     public static final String[] FIELDS = {
             COL_ID,
@@ -48,6 +43,7 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
             "CREATE TABLE " + TABLE_NAME + "("
                     + COL_MEDICINE_ID + " INTEGER NOT NULL,"
                     + COL_DODE_TIME + " TEXT NOT NULL,"
+                    + COL_ORDER + " INTEGER DEFAULT 0,"
                     + CREATE_BASE_FIELDS
                     + ")";
     private static TimeOfDoseDbHandler singleton;
@@ -194,7 +190,7 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
 
     public Loader<Cursor> getOfferTaskCursorLoader(Medicines medicines) {
         return new CursorLoader(
-                context, AppContentProvider.URI_DOSE, FIELDS, COL_MEDICINE_ID + " = " + medicines.getId(), null, COL_ORDER + " ASC, " + COL_TYPE + " ASC"
+                context, AppContentProvider.URI_DOSE, FIELDS, COL_MEDICINE_ID + " = " + medicines.getId(), null, COL_ORDER + " ASC, "
         );
     }
 

@@ -111,18 +111,18 @@ public class UserInfoDbHandler extends BaseDbHandler {
 
 
     public long insertOrUpdate(ContentValues value) {
-        UserInfo offer = (UserInfo) get();
-        if (offer != null) {
-            //update existing offer
+        UserInfo userInfo = (UserInfo) get();
+        if (userInfo != null) {
+            //update existing UserInfo
             if (value.containsKey(COL_ID))
                 value.remove(COL_ID);
             if (value.containsKey(COL_CREATED_AT))
                 value.remove(COL_CREATED_AT);
             value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
 
-            return DatabaseHandler.getInstance(context).getWritableDatabase().update(UserInfoDbHandler.TABLE_NAME, value, COL_ID + " = " + offer.getId(), null);
+            return DatabaseHandler.getInstance(context).getWritableDatabase().update(UserInfoDbHandler.TABLE_NAME, value, COL_ID + " = " + userInfo.getId(), null);
         } else {
-            // insert new offer
+            // insert new UserInfo
             value.put(COL_CREATED_AT, DateTimeUtil.getNowDateTime());
             value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
 

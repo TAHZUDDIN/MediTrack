@@ -40,9 +40,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="NAME"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
                         android:layout_weight="1"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        />
 
 
                     <TextView
@@ -50,7 +52,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
                         android:layout_weight="1"/>
 
                 </LinearLayout>
@@ -66,7 +68,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="AGE"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
                         android:layout_weight="1"
                         android:textStyle="bold"/>
 
@@ -76,7 +79,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
                         android:layout_weight="1"/>
 
                 </LinearLayout>
@@ -113,7 +116,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ADD NEW MEDICINE"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
                     android:layout_weight="1"
                     android:layout_centerVertical="true"
                     android:textStyle="bold"/>
@@ -160,7 +164,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="SOS NAME"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
                         android:layout_weight="1"
                         android:textStyle="bold"/>
 
@@ -170,7 +175,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
                         android:layout_weight="1"/>
 
                 </LinearLayout>
@@ -186,7 +191,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="SOS NUMBER"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
                         android:layout_weight="1"
                         android:textStyle="bold"/>
 
@@ -196,7 +202,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorPrimary"
                         android:layout_weight="1"/>
 
                 </LinearLayout>
