@@ -14,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.shawnlin.numberpicker.NumberPicker;
 import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
@@ -27,7 +29,8 @@ import org.w3c.dom.Text;
 
 import java.util.Date;
 
-public class EditActivity extends AppCompatActivity implements TextWatcher,View.OnClickListener{
+
+public class EditActivity extends AppCompatActivity implements TextWatcher,View.OnClickListener,NumberPicker.OnValueChangeListener{
 
     TextView textViewToolbarTitle;
     String toolbarTitle;
@@ -43,12 +46,51 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
     TextView textViewSvaeUserUpdate;
     TextView textView_button_sos_main;
 
+    NumberPicker numberPickerQuantityAtaTime ,
+                 numberPickerDosesPerDay,
+                 numberPickerMedicinesPurchased   ;
+
+
+    MaterialSpinner spinner;
+
+    TextView textViewPickTimeOne,
+            textViewPickTimeTwo,
+            textViewPickTimeThree;
+
+
+    SingleDateAndTimePicker singleDateAndTimePickerOne,
+            singleDateAndTimePickerTwo,
+            singleDateAndTimePickerThree;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+
+        numberPickerQuantityAtaTime =(NumberPicker)findViewById(R.id.id_number_picker_qty_ata_time);
+        numberPickerDosesPerDay =(NumberPicker)findViewById(R.id.id_number_picker_dosePerDay);
+        numberPickerDosesPerDay.setOnValueChangedListener(this);
+        numberPickerMedicinesPurchased =(NumberPicker)findViewById(R.id.id_number_picker_medicesPurchaded);
+
+
+        singleDateAndTimePickerOne = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_one);
+        singleDateAndTimePickerTwo = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_two);
+        singleDateAndTimePickerThree = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_three);
+
+
+//        textViewPickTimeOne = (TextView)findViewById(R.id.id_textView_PickTime_one);
+//        textViewPickTimeOne.setOnClickListener(this);
+//        textViewPickTimeTwo = (TextView)findViewById(R.id.id_textView_PickTime_Two);
+//        textViewPickTimeTwo.setOnClickListener(this);
+//        textViewPickTimeThree = (TextView)findViewById(R.id.id_textView_PickTime_Three);
+//        textViewPickTimeThree.setOnClickListener(this);
+
+
+
 
         textView_button_sos_main = (TextView)findViewById(R.id.is_button_sos_main);
         textView_button_sos_main.setOnClickListener(this);
@@ -73,7 +115,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
 
 
 
-        MaterialSpinner spinner = (MaterialSpinner) findViewById(R.id.spinner);
+        spinner = (MaterialSpinner) findViewById(R.id.id_spinner_dos_frequency);
         spinner.setItems("daily", "weekly");
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
@@ -186,6 +228,16 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
             case R.id.is_button_sos_main:
                 Util.makeACall(EditActivity.this);
                 break;
+
+//            case R.id.id_textView_PickTime_one:
+//
+//                break;
+//
+//            case R.id.id_textView_PickTime_Two:
+//                break;
+//
+//            case R.id.id_textView_PickTime_Three:
+//                break;
         }
     }
 
@@ -217,4 +269,39 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,View.
     public void afterTextChanged(Editable s) {
 
     }
+
+
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        Toast.makeText(this, "New Value "+newVal+" Spinner "+spinner.getText(),Toast.LENGTH_SHORT).show();
+        showHideTimePicker(newVal);
+    }
+
+
+
+    public void showHideTimePicker(int newVl_number_Picker){
+
+        switch (newVl_number_Picker){
+            case  1:
+                singleDateAndTimePickerOne.setVisibility(View.VISIBLE);
+                singleDateAndTimePickerTwo.setVisibility(View.GONE);
+                singleDateAndTimePickerThree.setVisibility(View.GONE);
+                break;
+            case  2:
+                singleDateAndTimePickerOne.setVisibility(View.VISIBLE);
+                singleDateAndTimePickerTwo.setVisibility(View.VISIBLE);
+                singleDateAndTimePickerThree.setVisibility(View.GONE);
+                break;
+            case  3:
+                singleDateAndTimePickerOne.setVisibility(View.VISIBLE);
+                singleDateAndTimePickerTwo.setVisibility(View.VISIBLE);
+                singleDateAndTimePickerThree.setVisibility(View.VISIBLE);
+                break;
+        }
+
+    }
+
+
+
 }
