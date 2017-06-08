@@ -50,6 +50,14 @@ public class MedicinesAllAdapter extends RecyclerView.Adapter<MedicinesAllAdapte
         Medicines medicine = medicines.get(position);
 
 
+        holder.parentLayout.setTag(medicine);
+        holder.textViewDosesPurchased.setText(medicine.getNo_dose_purchased());
+        holder.textViewdosFrequency.setText(medicine.getDose_frequency());
+        holder.textViewdosPerday.setText(medicine.getDoses_perday());
+        holder.textViewName.setText(medicine.getName());
+        holder.textViewQtyAtAtime.setText(medicine.getDose_quantity());
+
+
 
 //        holder.title.setText(movie.getTitle());
 //        holder.description.setText(movie.getOverview());

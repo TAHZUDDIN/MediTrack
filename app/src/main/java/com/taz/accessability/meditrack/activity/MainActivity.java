@@ -10,10 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.fragment.FragmentAll;
@@ -22,8 +24,6 @@ import com.taz.accessability.meditrack.fragment.FragmentToday;
 import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 import com.taz.accessability.meditrack.util.Util;
 
-import static com.taz.accessability.meditrack.R.id.textView1;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     BottomBar bottomBar;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView textViewToolbarTitle;
     String toolbarTitle = Constants.TODAYS_MEDICINES;
     FragmentSettings fragmentSettings;
-    TextView textView_button_sos_main;
+    RelativeLayout RL_button_sos_main;
     Toolbar toolbar ;
 
 
@@ -43,8 +43,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
 
-        textView_button_sos_main = (TextView)findViewById(R.id.is_button_sos_main);
-        textView_button_sos_main.setOnClickListener(this);
+        RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
+        rippleBackground.startRippleAnimation();
+
+        RL_button_sos_main = (RelativeLayout) findViewById(R.id.is_button_sos_main);
+        RL_button_sos_main.setOnClickListener(this);
         startAnimationButton();
         
         textViewToolbarTitle =(TextView)findViewById(R.id.id_toolbar_title);
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Use bounce interpolator with amplitude 0.2 and frequency 10
         MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
         myAnim.setInterpolator(interpolator);
-        textView_button_sos_main.startAnimation(myAnim);
+        RL_button_sos_main.startAnimation(myAnim);
     }
 
 

@@ -277,12 +277,6 @@
 
 
 
-
-
-
-
-
-
         <LinearLayout
             android:id="@+id/id_LL_UserInfo"
             android:layout_width="match_parent"

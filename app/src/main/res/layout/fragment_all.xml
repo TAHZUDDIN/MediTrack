@@ -23,30 +23,66 @@
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="?attr/colorPrimary">
 
-                <TextView
-                    android:id="@+id/expandedImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.7"
-                    />
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin">
+
+
+                    <RelativeLayout
+                        android:id="@+id/is_button_sos_main"
+                        android:layout_width="62dp"
+                        android:layout_height="52dp"
+                        android:background="@drawable/circle_button"
+                        android:layout_gravity="right">
+
+
+
+                        <com.skyfishjy.library.RippleBackground
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/circle_button"
+                            android:id="@+id/content"
+                            app:rb_color="@android:color/white"
+                            app:rb_radius="18dp"
+                            app:rb_rippleAmount="6"
+                            app:rb_duration="500"
+                            app:rb_scale="4">
+                        </com.skyfishjy.library.RippleBackground>
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="right"
+                            android:text="SOS"
+                            android:textColor="@color/colorPrimary"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_centerInParent="true"
+                            />
+
+
+
+                    </RelativeLayout>
+
+
+
+
+
                 </android.support.v7.widget.Toolbar>
 
+                <!--app:layout_scrollFlags="scroll|enterAlways"-->
 
-            </android.support.design.widget.CollapsingToolbarLayout>
+
         </android.support.design.widget.AppBarLayout>
 
 

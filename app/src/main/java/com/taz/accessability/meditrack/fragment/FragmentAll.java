@@ -9,12 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
+import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.adapter.MedicinesAllAdapter;
 import com.taz.accessability.meditrack.data.MedicinesDbHandler;
 import com.taz.accessability.meditrack.data.model.Medicines;
+import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 
 import java.util.List;
 
@@ -22,7 +26,7 @@ import java.util.List;
  * Created by tahzuddin on 03/06/17.
  */
 
-public class FragmentAll  extends Fragment {
+public class FragmentAll  extends Fragment implements View.OnClickListener {
 
     List <Medicines> medicines;
     LinearLayoutManager linearLayoutManager;
@@ -31,6 +35,7 @@ public class FragmentAll  extends Fragment {
     RelativeLayout Rl_ProgressBar;
     CoordinatorLayout parent_coordinatorLayout;
     SwipeRefreshLayout swipeRefreshLayout;
+    RelativeLayout RL_button_sos_main;
 
 
 
@@ -49,6 +54,7 @@ public class FragmentAll  extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_all, container, false);
+        startAnimationSosButton(v);
 
         recyclerViewMovies = (RecyclerView)v.findViewById(R.id.id_recyclerView);
         Rl_ProgressBar = (RelativeLayout)v.findViewById(R.id.id_RL_progressbar);
@@ -77,5 +83,25 @@ public class FragmentAll  extends Fragment {
 
 
 
+    public void startAnimationSosButton(View v){
 
+        RL_button_sos_main = (RelativeLayout)v.findViewById(R.id.is_button_sos_main);
+        RL_button_sos_main.setOnClickListener(this);
+
+        RippleBackground rippleBackground=(RippleBackground)v.findViewById(R.id.content);
+        rippleBackground.startRippleAnimation();
+
+        final Animation myAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.bounce);
+
+        // Use bounce interpolator with amplitude 0.2 and frequency 10
+        MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
+        myAnim.setInterpolator(interpolator);
+        RL_button_sos_main.startAnimation(myAnim);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
 }
