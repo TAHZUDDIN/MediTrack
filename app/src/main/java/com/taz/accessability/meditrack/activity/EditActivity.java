@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shawnlin.numberpicker.NumberPicker;
+import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.data.MedicinesDbHandler;
@@ -79,6 +81,8 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
     String medicinesPurchased;
     String diseFrequency;
 
+    RelativeLayout RL_button_sos_main;
+
 
 
 
@@ -116,8 +120,8 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
 
 
-        textView_button_sos_main = (TextView)findViewById(R.id.is_button_sos_main);
-        textView_button_sos_main.setOnClickListener(this);
+        RL_button_sos_main = (RelativeLayout) findViewById(R.id.is_button_sos_main);
+        RL_button_sos_main.setOnClickListener(this);
         startAnimationButton();
 
         textViewToolbarTitle =(TextView)findViewById(R.id.id_toolbar_title);
@@ -260,11 +264,16 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
 
     public void startAnimationButton() {
+
+        RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
+        rippleBackground.startRippleAnimation();
+
         final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
+
         // Use bounce interpolator with amplitude 0.2 and frequency 10
         MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
         myAnim.setInterpolator(interpolator);
-        textView_button_sos_main.startAnimation(myAnim);
+        RL_button_sos_main.startAnimation(myAnim);
     }
 
 

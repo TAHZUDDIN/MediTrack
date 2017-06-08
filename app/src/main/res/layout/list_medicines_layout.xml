@@ -16,8 +16,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:elevation="5dp"
         card_view:cardCornerRadius="9dp"
         app:cardBackgroundColor="@android:color/white"
@@ -59,7 +59,6 @@
                     android:maxLines="1"
                     android:gravity="left"
                     android:textSize="@dimen/text_20sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
@@ -93,7 +92,6 @@
                     android:maxLines="1"
                     android:gravity="left"
                     android:textSize="@dimen/text_20sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
@@ -128,7 +126,6 @@
                     android:maxLines="1"
                     android:gravity="left"
                     android:textSize="@dimen/text_20sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
@@ -162,7 +159,6 @@
                     android:maxLines="1"
                     android:gravity="left"
                     android:textSize="@dimen/text_20sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
@@ -196,7 +192,6 @@
                     android:maxLines="1"
                     android:gravity="center"
                     android:textSize="@dimen/text_20sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
@@ -230,7 +225,6 @@
                     android:layout_weight="1"
                     android:maxLines="1"
                     android:textSize="@dimen/text_20sp"
-                    android:textStyle="bold"
                     android:gravity="left"
                     android:textColor="@color/colorPrimary"
                     android:layout_marginLeft="@dimen/margin_6dp"/>
