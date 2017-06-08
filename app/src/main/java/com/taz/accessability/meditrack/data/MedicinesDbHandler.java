@@ -16,6 +16,8 @@ import com.taz.accessability.meditrack.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
+
 /**
  * Created by tahzuddin on 04/06/17.
  */
@@ -99,7 +101,27 @@ public class MedicinesDbHandler extends BaseDbHandler{
 
     @Override
     public BaseModel get() {
-        return null;
+      return null;
+    }
+
+
+
+
+    public List<Medicines> getAllMedicines() {
+        Cursor cursor = context.getContentResolver().query(
+                AppContentProvider.URI_MEDICINE, null, null, null, null
+        );
+
+        List<Medicines> medicines = new ArrayList<>();
+
+        if ((cursor.moveToFirst()) && cursor.getCount() != 0) {
+            //cursor is not empty
+            Medicines medicine = new Medicines(cursor);
+            medicines.add(medicine);
+        }
+
+        cursor.close();
+        return medicines;
     }
 
 

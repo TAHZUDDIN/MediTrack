@@ -15,6 +15,8 @@ import com.taz.accessability.meditrack.data.model.Medicines;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.description;
+
 
 public class MedicinesAllAdapter extends RecyclerView.Adapter<MedicinesAllAdapter.ViewHolder> implements View.OnClickListener {
 
@@ -36,7 +38,7 @@ public class MedicinesAllAdapter extends RecyclerView.Adapter<MedicinesAllAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_movies_layout, parent, false); //Inflating the layout
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_medicines_layout, parent, false); //Inflating the layout
         ViewHolder vhItem = new ViewHolder(v); //Creating ViewHolder and passing the object of type view
         return vhItem;
     }
@@ -64,7 +66,7 @@ public class MedicinesAllAdapter extends RecyclerView.Adapter<MedicinesAllAdapte
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.id_LinLay_parent_inflatingMovies:
+            case R.id.id_LinLay_parent_inflatingMedicines:
 //                startActivityListener.startActivityMethod(((Movies.Movie) view.getTag()));
                 break;
             default:
@@ -76,16 +78,27 @@ public class MedicinesAllAdapter extends RecyclerView.Adapter<MedicinesAllAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout parentLayout;
-        ImageView movieImage;
-        TextView title, description;
+        TextView textViewName,
+                textViewdosFrequency,
+                textViewQtyAtAtime,
+                textViewdosPerday,
+                textViewtime,
+                textViewDosesPurchased
+                ;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            parentLayout = (LinearLayout) itemView.findViewById(R.id.id_LinLay_parent_inflatingMovies);
+            parentLayout = (LinearLayout) itemView.findViewById(R.id.id_LinLay_parent_inflatingMedicines);
             parentLayout.setOnClickListener(MedicinesAllAdapter.this);
-            movieImage = (ImageView) itemView.findViewById(R.id.id_image);
-            title = (TextView) itemView.findViewById(R.id.id_title);
-            description = (TextView) itemView.findViewById(R.id.id_description);
+
+            textViewName = (TextView)itemView.findViewById(R.id.id_name);
+            textViewdosFrequency = (TextView)itemView.findViewById(R.id.id_DoseFrequency);
+            textViewQtyAtAtime = (TextView)itemView.findViewById(R.id.id_qty_at_atime);
+            textViewdosPerday = (TextView)itemView.findViewById(R.id.id_dose_perday);
+            textViewtime = (TextView)itemView.findViewById(R.id.id_times);
+            textViewDosesPurchased = (TextView)itemView.findViewById(R.id.id_medicine_purchased);
+
+
         }
     }
 

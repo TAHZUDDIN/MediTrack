@@ -13,6 +13,7 @@ import com.taz.accessability.meditrack.data.model.TimeOfDoses;
 import com.taz.accessability.meditrack.util.DateTimeUtil;
 import com.taz.accessability.meditrack.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -193,6 +194,26 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
         return context.getContentResolver().query(
                 AppContentProvider.URI_DOSE, FIELDS, COL_MEDICINE_ID + " = " + medicines.getId(), null, null
         );
+    }
+
+
+
+    public List<TimeOfDoses> getAllTimesOfDoses(Medicines medicines) {
+//        return context.getContentResolver().query(
+//                AppContentProvider.URI_DOSE, FIELDS, COL_MEDICINE_ID + " = " + medicines.getId(), null, null
+//        );
+
+        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+COL_MEDICINE_ID +" ="+medicines.getId() ,null);
+
+        List<TimeOfDoses> timeOfDoses = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            TimeOfDoses timeOfDose = new TimeOfDoses(cursor);
+            timeOfDoses.add(timeOfDose);
+        }
+
+        cursor.close();
+        return timeOfDoses;
     }
 
 
