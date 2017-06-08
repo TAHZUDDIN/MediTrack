@@ -114,7 +114,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
 
         List<Medicines> medicines = new ArrayList<>();
 
-        if ((cursor.moveToFirst()) && cursor.getCount() != 0) {
+        while (cursor.moveToNext()) {
             //cursor is not empty
             Medicines medicine = new Medicines(cursor);
             medicines.add(medicine);

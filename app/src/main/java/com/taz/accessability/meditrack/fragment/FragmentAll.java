@@ -52,6 +52,7 @@ public class FragmentAll  extends Fragment {
 
         recyclerViewMovies = (RecyclerView)v.findViewById(R.id.id_recyclerView);
         Rl_ProgressBar = (RelativeLayout)v.findViewById(R.id.id_RL_progressbar);
+        Rl_ProgressBar.setVisibility(View.GONE);
         parent_coordinatorLayout =(CoordinatorLayout)v.findViewById(R.id.id_coordinatorLayout);
         swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.id_swipeRefreshLayout);
         initAdapterAndCall();
