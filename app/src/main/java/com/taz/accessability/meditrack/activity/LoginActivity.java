@@ -16,6 +16,10 @@ import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.app.MyApplication;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
 import com.taz.accessability.meditrack.data.model.UserInfo;
+import com.taz.accessability.meditrack.util.Util;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -95,11 +99,14 @@ public class LoginActivity extends AppCompatActivity {
         if(!sosName.getText().toString().equals("") && !sosNumber.getText().toString().equals("")){
             SosName = sosName.getText().toString();
             SosNumber = sosNumber.getText().toString();
+            if(validateMobileNumber(SosNumber))
+                proceedToStore();
+            else
+                Util.ToastDisplay(this, "Not a valid Mobile Number");
 
-            proceedToStore();
         }
         else
-            Toast.makeText(this, "SOS Name and Numberis Required", Toast.LENGTH_SHORT).show();
+            Util.ToastDisplay(this, "SOS Name and Numberis Required");
     }
 
 
@@ -225,5 +232,14 @@ public class LoginActivity extends AppCompatActivity {
             showMainLoginView();
         else
             super.onBackPressed();
+    }
+
+
+
+    private boolean validateMobileNumber(String mobileNumber) {
+        String MOBILE_NUMBER_PATTERN = "^[0-9]{10}$";
+        Pattern pattern = Pattern.compile(MOBILE_NUMBER_PATTERN);
+        Matcher matcher = pattern.matcher(mobileNumber);
+        return matcher.matches();
     }
 }

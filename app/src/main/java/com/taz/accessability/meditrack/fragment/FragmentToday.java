@@ -9,16 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
-import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
-import com.taz.accessability.meditrack.adapter.MedicinesAllAdapter;
+import com.taz.accessability.meditrack.adapter.TodayMediAdapter;
 import com.taz.accessability.meditrack.data.MedicinesDbHandler;
 import com.taz.accessability.meditrack.data.model.Medicines;
-import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 
 import java.util.List;
 
@@ -31,7 +27,7 @@ public class FragmentToday  extends Fragment implements View.OnClickListener {
     List<Medicines> medicines;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerViewMovies;
-    MedicinesAllAdapter moviesAdapter;
+    TodayMediAdapter todaysMoviesAdapter;
     RelativeLayout Rl_ProgressBar;
     CoordinatorLayout parent_coordinatorLayout;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -73,10 +69,10 @@ public class FragmentToday  extends Fragment implements View.OnClickListener {
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewMovies.setLayoutManager(linearLayoutManager);
-        moviesAdapter = new MedicinesAllAdapter(medicines);
-//        moviesAdapter.setStartActivityListener(this);
-        recyclerViewMovies.setAdapter(moviesAdapter);
-        moviesAdapter.notifyDataSetChanged();
+        todaysMoviesAdapter = new TodayMediAdapter(medicines);
+//        todaysMoviesAdapter.setStartActivityListener(this);
+        recyclerViewMovies.setAdapter(todaysMoviesAdapter);
+        todaysMoviesAdapter.notifyDataSetChanged();
     }
 
 

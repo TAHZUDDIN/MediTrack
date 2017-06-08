@@ -21,4 +21,5 @@ public class Constants {
     public static String   EDIT_INFO = "Edit Info";
     public static String   EDIT_MEDICINE = "Edit Medicine";
     public static String   ADD_MEDICINE = "Add Medicine";
+    public static String   MEDICINE = "medicine";
 }

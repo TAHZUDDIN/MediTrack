@@ -23,6 +23,7 @@ import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.data.MedicinesDbHandler;
 import com.taz.accessability.meditrack.data.TimeOfDoseDbHandler;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
+import com.taz.accessability.meditrack.data.model.Medicines;
 import com.taz.accessability.meditrack.data.model.UserInfo;
 import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 import com.taz.accessability.meditrack.util.Util;
@@ -84,6 +85,9 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
     RelativeLayout RL_button_sos_main;
 
 
+    Medicines medicinesToEdit;
+
+
 
 
     @Override
@@ -105,9 +109,6 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
         numberPickerMedicinesPurchased =(NumberPicker)findViewById(R.id.id_number_picker_medicesPurchaded);
 
 
-//        singleDateAndTimePickerOne = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_one);
-//        singleDateAndTimePickerTwo = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_two);
-//        singleDateAndTimePickerThree = (SingleDateAndTimePicker)findViewById(R.id.id_SingleDateAndTimePicker_three);
 
 
         textViewPickTimeOne = (TextView)findViewById(id_textView_PickTime_one);
@@ -154,7 +155,13 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
         showHideTimePicker(1);
 
+
+
+         handleEditMedicine();
+
+
     }
+
 
 
 
@@ -449,5 +456,21 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
 
+
+
+    private void handleEditMedicine() {
+
+        if(getIntent().getSerializableExtra(Constants.MEDICINE) != null){
+
+            medicinesToEdit = (Medicines)getIntent().getSerializableExtra(Constants.MEDICINE);
+
+
+        }
+    }
 }

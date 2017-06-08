@@ -1,5 +1,6 @@
 package com.taz.accessability.meditrack.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
@@ -15,10 +16,14 @@ import android.widget.RelativeLayout;
 
 import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
+import com.taz.accessability.meditrack.activity.EditActivity;
 import com.taz.accessability.meditrack.adapter.MedicinesAllAdapter;
+import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.data.MedicinesDbHandler;
 import com.taz.accessability.meditrack.data.model.Medicines;
+import com.taz.accessability.meditrack.listener.StartActivityListener;
 import com.taz.accessability.meditrack.util.MyBounceInterpolator;
+import com.taz.accessability.meditrack.util.Util;
 
 import java.util.List;
 
@@ -26,7 +31,7 @@ import java.util.List;
  * Created by tahzuddin on 03/06/17.
  */
 
-public class FragmentAll  extends Fragment implements View.OnClickListener {
+public class FragmentAll  extends Fragment implements View.OnClickListener,StartActivityListener {
 
     List <Medicines> medicines;
     LinearLayoutManager linearLayoutManager;
@@ -75,8 +80,9 @@ public class FragmentAll  extends Fragment implements View.OnClickListener {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewMovies.setLayoutManager(linearLayoutManager);
         moviesAdapter = new MedicinesAllAdapter(medicines);
-//        moviesAdapter.setStartActivityListener(this);
+        moviesAdapter.setStartActivityListener(this);
         recyclerViewMovies.setAdapter(moviesAdapter);
+
         moviesAdapter.notifyDataSetChanged();
     }
 
@@ -103,5 +109,19 @@ public class FragmentAll  extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
+        switch (v.getId()){
+            case R.id.is_button_sos_main:
+                Util.makeACall(getActivity());
+                break;
+        }
+
+    }
+
+    @Override
+    public void startActivityMethod(Medicines medicines) {
+        Intent i = new Intent(getActivity(), EditActivity.class);
+        i.putExtra(Constants.MEDICINE,medicines);
+        getActivity().startActivityForResult(i, Constants.START_ACTIVITY_FOR_RESULT_EDIT_MEDIA_INFO);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

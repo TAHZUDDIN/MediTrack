@@ -1,84 +1,132 @@
 package com.taz.accessability.meditrack.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.taz.accessability.meditrack.R;
+import com.taz.accessability.meditrack.app.MyApplication;
+import com.taz.accessability.meditrack.data.TimeOfDoseDbHandler;
 import com.taz.accessability.meditrack.data.model.Medicines;
-
+import com.taz.accessability.meditrack.data.model.TimeOfDoses;
+import com.taz.accessability.meditrack.listener.StartActivityListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.description;
+
+public class MedicinesAllAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
 
 
-public class MedicinesAllAdapter extends RecyclerView.Adapter<MedicinesAllAdapter.ViewHolder> implements View.OnClickListener {
 
+    private static final int TYPE_DEFAULT = 0;
+    // IF the view under inflation and population is header or Item
+    private static final int TYPE_NO_ITEM = 1;
+    Context context;
 
     List<Medicines> medicines;
-//    public StartActivityListener startActivityListener;
-//
-//
-//    public void setStartActivityListener(StartActivityListener startActivityListener) {
-//        this.startActivityListener = startActivityListener;
-//    }
+
+
+     public StartActivityListener startActivityListener;
+
+
+    public void setStartActivityListener(StartActivityListener startActivityListener) {
+        this.startActivityListener = startActivityListener;
+    }
+
 
 
     public MedicinesAllAdapter(List<Medicines> medicines) {
         this.medicines = new ArrayList<>();
         this.medicines = medicines;
+        this.context = MyApplication.getInstance();
     }
 
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_medicines_layout, parent, false); //Inflating the layout
-        ViewHolder vhItem = new ViewHolder(v); //Creating ViewHolder and passing the object of type view
-        return vhItem;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        switch (viewType){
+            case TYPE_DEFAULT:
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_medicines_layout, parent, false); //Inflating the layout
+                ViewHolder vhItem = new ViewHolder(v); //Creating ViewHolder and passing the object of type view
+                return vhItem;
+
+            case TYPE_NO_ITEM:
+                View v_no_item = LayoutInflater.from(parent.getContext()).inflate(R.layout.no_item, parent, false); //Inflating the layout
+                ViewHolderNoItem vhNoItem = new ViewHolderNoItem(v_no_item); //Creating ViewHolder and passing the object of type view
+                return vhNoItem;
+        }
+        return null;
     }
 
 
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Medicines medicine = medicines.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        switch (holder.getItemViewType()){
+            case TYPE_DEFAULT:
+                String times = "";
+                Medicines medicine = medicines.get(position);
+                List<TimeOfDoses> timeOfDoses = TimeOfDoseDbHandler.getInstance(context).getAllTimesOfDoses(medicine);
+                for(TimeOfDoses td: timeOfDoses){
+                    times += td.getDosetime()+", ";
+                }
+                MedicinesAllAdapter.ViewHolder vhDefault = (MedicinesAllAdapter.ViewHolder)holder;
+                vhDefault.parentLayout.setTag(medicine);
+                vhDefault.textViewDosesPurchased.setText(medicine.getNo_dose_purchased());
+                vhDefault.textViewdosFrequency.setText(medicine.getDose_frequency());
+                vhDefault.textViewdosPerday.setText(medicine.getDoses_perday());
+                vhDefault.textViewName.setText(medicine.getName());
+                vhDefault.textViewQtyAtAtime.setText(medicine.getDose_quantity());
+                vhDefault.textViewtime.setText(times);
+                break;
 
 
-        holder.parentLayout.setTag(medicine);
-        holder.textViewDosesPurchased.setText(medicine.getNo_dose_purchased());
-        holder.textViewdosFrequency.setText(medicine.getDose_frequency());
-        holder.textViewdosPerday.setText(medicine.getDoses_perday());
-        holder.textViewName.setText(medicine.getName());
-        holder.textViewQtyAtAtime.setText(medicine.getDose_quantity());
+            case TYPE_NO_ITEM:
+                break;
+        }
 
-
-
-//        holder.title.setText(movie.getTitle());
-//        holder.description.setText(movie.getOverview());
-//        holder.parentLayout.setTag(movie);
     }
+
+
 
 
     @Override
     public int getItemCount() {
-        return medicines.size();
+        if(medicines.size() ==0)
+            return 1;
+        else
+            return medicines.size();
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        return medicines.size()==0 ? TYPE_NO_ITEM : TYPE_DEFAULT;
+    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_LinLay_parent_inflatingMedicines:
-//                startActivityListener.startActivityMethod(((Movies.Movie) view.getTag()));
+                startActivityListener.startActivityMethod(((Medicines)view.getTag()));
                 break;
             default:
                 break;
+        }
+    }
+
+
+    public class ViewHolderNoItem extends RecyclerView.ViewHolder{
+
+        public ViewHolderNoItem(View itemView) {
+            super(itemView);
         }
     }
 
@@ -105,7 +153,6 @@ public class MedicinesAllAdapter extends RecyclerView.Adapter<MedicinesAllAdapte
             textViewdosPerday = (TextView)itemView.findViewById(R.id.id_dose_perday);
             textViewtime = (TextView)itemView.findViewById(R.id.id_times);
             textViewDosesPurchased = (TextView)itemView.findViewById(R.id.id_medicine_purchased);
-
 
         }
     }
