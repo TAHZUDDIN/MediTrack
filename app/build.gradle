@@ -46,4 +46,6 @@ dependencies {
 
     compile 'com.wdullaer:materialdatetimepicker:3.2.2'
 
+    compile 'com.tuyenmonkey:mkloader:1.2.0'
+
 }

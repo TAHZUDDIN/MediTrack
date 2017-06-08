@@ -394,17 +394,38 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
                 case 1:
                     ContentValues cv = getContentValuesTimeOfDose(returnValue,doseTimeOne);
                     long returnTimeDb =TimeOfDoseDbHandler.getInstance(this).insert(cv);
+                    Util.ToastDisplay(this, "returnValue DOSE "+returnTimeDb);
+                    break;
 
-//                    TimeOfDoses timeOfDoses = new TimeOfDoses();
-//                    timeOfDoses.setDosetime(doseTimeOne);
-//                    timeOfDoses.setMedicineId(returnValue);
-//                    TimeOfDoseDbHandler.getInstance(this).insert(timeOfDoses);
+                case 2:
+                    ContentValues cv_21 = getContentValuesTimeOfDose(returnValue,doseTimeOne);
+                    long returnTimeDb_21 =TimeOfDoseDbHandler.getInstance(this).insert(cv_21);
 
-//                    Util.ToastDisplay(this, "returnValue DOSE "+returnValue);
+                    ContentValues cv_22 = getContentValuesTimeOfDose(returnValue,doseTimeTwo);
+                    long returnTimeDb_22 =TimeOfDoseDbHandler.getInstance(this).insert(cv_22);
+                    Util.ToastDisplay(this, "returnTimeDb_21 "+returnTimeDb_21);
+                    Util.ToastDisplay(this, "returnTimeDb_22 "+returnTimeDb_22);
+                    break;
+
+                case 3:
+                    ContentValues cv_31= getContentValuesTimeOfDose(returnValue,doseTimeOne);
+                    long returnTimeDb_31 =TimeOfDoseDbHandler.getInstance(this).insert(cv_31);
+
+                    ContentValues cv_32 = getContentValuesTimeOfDose(returnValue,doseTimeTwo);
+                    long returnTimeDb_32 =TimeOfDoseDbHandler.getInstance(this).insert(cv_32);
+
+                    ContentValues cv_33 = getContentValuesTimeOfDose(returnValue,doseTimeThree);
+                    long returnTimeDb_33 =TimeOfDoseDbHandler.getInstance(this).insert(cv_33);
+                    Util.ToastDisplay(this, "returnTimeDb_31"+returnTimeDb_31);
+                    Util.ToastDisplay(this, "returnTimeDb_32"+returnTimeDb_32);
+                    Util.ToastDisplay(this, "returnTimeDb_33"+returnTimeDb_33);
                     break;
 
             }
 
+
+        setResult(Constants.START_ACTIVITY_FOR_RESULT_ADD_MEDIA_INFO);
+        finish();
     }
 
 
