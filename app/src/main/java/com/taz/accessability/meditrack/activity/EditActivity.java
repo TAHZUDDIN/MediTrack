@@ -24,12 +24,14 @@ import com.taz.accessability.meditrack.data.MedicinesDbHandler;
 import com.taz.accessability.meditrack.data.TimeOfDoseDbHandler;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
 import com.taz.accessability.meditrack.data.model.Medicines;
+import com.taz.accessability.meditrack.data.model.TimeOfDoses;
 import com.taz.accessability.meditrack.data.model.UserInfo;
 import com.taz.accessability.meditrack.util.MyBounceInterpolator;
 import com.taz.accessability.meditrack.util.Util;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
+import java.util.List;
 
 import static com.taz.accessability.meditrack.R.id.id_textView_PickTime_one;
 
@@ -86,6 +88,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
 
     Medicines medicinesToEdit;
+    List<TimeOfDoses> timeOfDosesToEdit;
 
 
 
@@ -469,6 +472,31 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
         if(getIntent().getSerializableExtra(Constants.MEDICINE) != null){
 
             medicinesToEdit = (Medicines)getIntent().getSerializableExtra(Constants.MEDICINE);
+            timeOfDosesToEdit = TimeOfDoseDbHandler.getInstance(this).getAllTimesOfDoses(medicinesToEdit);
+            showHideTimePicker(timeOfDosesToEdit.size());
+            switch (timeOfDosesToEdit.size()){
+                case 1:
+                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(0).getDosetime());
+                    break;
+                case 2:
+                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(0).getDosetime());
+                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(1).getDosetime());
+                    break;
+                case 3:
+                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(0).getDosetime());
+                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(1).getDosetime());
+                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(2).getDosetime());
+                    break;
+            }
+
+            textInputLayoutMedicineName.getEditText().setText(medicinesToEdit.getName());
+            numberPickerMedicinesPurchased.setValue(Integer.valueOf(medicinesToEdit.getNo_dose_purchased()));
+            numberPickerDosesPerDay.setValue(Integer.valueOf(medicinesToEdit.getDoses_perday()));
+            numberPickerQuantityAtaTime.setValue(Integer.valueOf(medicinesToEdit.getDose_quantity()));
+
+            int spinnerIndex =   medicinesToEdit.getDose_frequency().equals("daily")? 0:1;
+            spinner.setSelectedIndex(spinnerIndex);
+            textViewSaveMedicine.setClickable(false);
 
 
         }
