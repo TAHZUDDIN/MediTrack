@@ -59,7 +59,7 @@ public class FragmentAll  extends Fragment implements View.OnClickListener,Start
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_all, container, false);
-        startAnimationSosButton(v);
+//        startAnimationSosButton(v);
 
         recyclerViewMovies = (RecyclerView)v.findViewById(R.id.id_recyclerView);
         Rl_ProgressBar = (RelativeLayout)v.findViewById(R.id.id_RL_progressbar);

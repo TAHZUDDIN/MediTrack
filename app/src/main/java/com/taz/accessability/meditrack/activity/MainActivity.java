@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String toolbarTitle = Constants.TODAYS_MEDICINES;
     FragmentSettings fragmentSettings;
     FragmentAll  fragmentAll;
-    RelativeLayout RL_button_sos_main;
+    RelativeLayout RL_button_sos_main,
+                   RL_button_sos_main_search ;
     Toolbar toolbar ;
 
 
@@ -49,8 +50,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
         rippleBackground.startRippleAnimation();
 
+
+        RippleBackground rippleBackground_search=(RippleBackground)findViewById(R.id.content_search);
+        rippleBackground_search.startRippleAnimation();
+
         RL_button_sos_main = (RelativeLayout) findViewById(R.id.is_button_sos_main);
         RL_button_sos_main.setOnClickListener(this);
+//        startAnimationButton();
+
+
+        RL_button_sos_main_search = (RelativeLayout) findViewById(R.id.is_button_sos_main_search);
+        RL_button_sos_main_search.setOnClickListener(this);
         startAnimationButton();
         
         textViewToolbarTitle =(TextView)findViewById(R.id.id_toolbar_title);
@@ -130,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
         myAnim.setInterpolator(interpolator);
         RL_button_sos_main.startAnimation(myAnim);
+
+        RL_button_sos_main_search.startAnimation(myAnim);
     }
 
 
