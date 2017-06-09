@@ -55,7 +55,7 @@ public class TodayMediAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         switch (viewType){
             case TYPE_DEFAULT:
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_medicines_layout, parent, false); //Inflating the layout
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_medicines_today, parent, false); //Inflating the layout
                 ViewHolder vhItem = new ViewHolder(v); //Creating ViewHolder and passing the object of type view
                 return vhItem;
 
@@ -82,8 +82,6 @@ public class TodayMediAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
                 TodayMediAdapter.ViewHolder vhDefault = (TodayMediAdapter.ViewHolder)holder;
                 vhDefault.parentLayout.setTag(medicine);
-                vhDefault.textViewDosesPurchased.setText(medicine.getNo_dose_purchased());
-                vhDefault.textViewdosFrequency.setText(medicine.getDose_frequency());
                 vhDefault.textViewdosPerday.setText(medicine.getDoses_perday());
                 vhDefault.textViewName.setText(medicine.getName());
                 vhDefault.textViewQtyAtAtime.setText(medicine.getDose_quantity());
@@ -151,11 +149,10 @@ public class TodayMediAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //            parentLayout.setOnClickListener(MedicinesAllAdapter.this);
 
             textViewName = (TextView)itemView.findViewById(R.id.id_name);
-            textViewdosFrequency = (TextView)itemView.findViewById(R.id.id_DoseFrequency);
             textViewQtyAtAtime = (TextView)itemView.findViewById(R.id.id_qty_at_atime);
             textViewdosPerday = (TextView)itemView.findViewById(R.id.id_dose_perday);
             textViewtime = (TextView)itemView.findViewById(R.id.id_times);
-            textViewDosesPurchased = (TextView)itemView.findViewById(R.id.id_medicine_purchased);
+
 
         }
     }

@@ -65,7 +65,7 @@ public class FragmentAll  extends Fragment implements View.OnClickListener,Start
         Rl_ProgressBar = (RelativeLayout)v.findViewById(R.id.id_RL_progressbar);
         Rl_ProgressBar.setVisibility(View.GONE);
         parent_coordinatorLayout =(CoordinatorLayout)v.findViewById(R.id.id_coordinatorLayout);
-        swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.id_swipeRefreshLayout);
+//        swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.id_swipeRefreshLayout);
         initAdapterAndCall();
         return v;
     }
@@ -121,7 +121,15 @@ public class FragmentAll  extends Fragment implements View.OnClickListener,Start
     public void startActivityMethod(Medicines medicines) {
         Intent i = new Intent(getActivity(), EditActivity.class);
         i.putExtra(Constants.MEDICINE,medicines);
+        i.putExtra(Constants.EDIT_MEDI_INFO,Constants.EDIT_MEDI_INFO);
         getActivity().startActivityForResult(i, Constants.START_ACTIVITY_FOR_RESULT_EDIT_MEDIA_INFO);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+
+    public void UpdateUi(){
+
+        initAdapterAndCall();
+
     }
 }

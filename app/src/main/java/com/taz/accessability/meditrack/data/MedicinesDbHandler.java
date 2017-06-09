@@ -16,8 +16,6 @@ import com.taz.accessability.meditrack.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.id;
-
 /**
  * Created by tahzuddin on 04/06/17.
  */
@@ -253,6 +251,28 @@ public class MedicinesDbHandler extends BaseDbHandler{
             return DatabaseHandler.getInstance(context).getWritableDatabase().insert(MedicinesDbHandler.TABLE_NAME, null, value);
         }
     }
+
+
+
+
+
+    public long Update(ContentValues value) {
+
+            //update existing offer
+            long id = value.getAsLong(COL_ID);
+            if (value.containsKey(COL_ID))
+                value.remove(COL_ID);
+            if (value.containsKey(COL_CREATED_AT))
+                value.remove(COL_CREATED_AT);
+            value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
+
+            return DatabaseHandler.getInstance(context).getWritableDatabase().update(MedicinesDbHandler.TABLE_NAME, value, COL_ID + " = " + id, null);
+
+    }
+
+
+
+
 
 
     public void bulkInsert(List<Medicines> medicines) {

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView textViewToolbarTitle;
     String toolbarTitle = Constants.TODAYS_MEDICINES;
     FragmentSettings fragmentSettings;
+    FragmentAll  fragmentAll;
     RelativeLayout RL_button_sos_main;
     Toolbar toolbar ;
 
@@ -72,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         toolbarTitle = Constants.TODAYS_MEDICINES;
                         break;
                     case R.id.tab_all:
-                        selectedFragment = FragmentAll.newInstance();
+                        fragmentAll = FragmentAll.newInstance();
+                        selectedFragment = fragmentAll;
                         toolbar.setVisibility(View.GONE);
                         toolbarTitle = Constants.ALL_MEDICINE;
                         break;
@@ -166,6 +168,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             if(fragmentSettings != null)
                 fragmentSettings.UpdateUi();
+
+        }
+        else if(requestCode== Constants.START_ACTIVITY_FOR_RESULT_EDIT_MEDIA_INFO){
+
+            if(fragmentAll != null)
+                fragmentAll.UpdateUi();
 
         }
     }

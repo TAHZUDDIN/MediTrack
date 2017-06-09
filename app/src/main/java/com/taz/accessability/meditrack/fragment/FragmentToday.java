@@ -55,7 +55,7 @@ public class FragmentToday  extends Fragment implements View.OnClickListener {
         Rl_ProgressBar = (RelativeLayout)v.findViewById(R.id.id_RL_progressbar);
         Rl_ProgressBar.setVisibility(View.GONE);
         parent_coordinatorLayout =(CoordinatorLayout)v.findViewById(R.id.id_coordinatorLayout);
-        swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.id_swipeRefreshLayout);
+//        swipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.id_swipeRefreshLayout);
         initAdapterAndCall();
         return v;
     }

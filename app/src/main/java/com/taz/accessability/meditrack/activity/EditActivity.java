@@ -87,7 +87,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
     RelativeLayout RL_button_sos_main;
 
 
-    Medicines medicinesToEdit;
+    Medicines medicinesToEdit, medicinesAfterEdit;
     List<TimeOfDoses> timeOfDosesToEdit;
 
 
@@ -131,7 +131,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
         textViewToolbarTitle =(TextView)findViewById(R.id.id_toolbar_title);
         LL_Parent_UserInfo =(LinearLayout)findViewById(R.id.id_LL_UserInfo);
         NestedScrollview_Parent_Medicine =(NestedScrollView) findViewById(R.id.id_NestedScroll_Medicine);
-        setViewType();
+
 
         userInfo =(UserInfo) UserInfoDbHandler.getInstance(this).get();
         textInputLayoutName = (TextInputLayout)findViewById(R.id.id_text_input_Name);
@@ -160,7 +160,11 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
 
 
+
+
          handleEditMedicine();
+
+        setViewType();
 
 
     }
@@ -201,7 +205,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
             VisibilityHideShow(false);
         }
         else if(typeMedicineEdit != null){
-            toolbarTitle = Constants.EDIT_MEDI_INFO;
+            toolbarTitle = Constants.EDIT_MEDICINE;
             VisibilityHideShow(false);
         }
         textViewToolbarTitle.setText(toolbarTitle);
@@ -265,7 +269,10 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
                 break;
 
             case R.id.id_TV_save_Medicine:
-                saveMedicine();
+                if(getIntent().getSerializableExtra(Constants.MEDICINE) != null)
+                    updateMedicineEdit();
+                else
+                    saveMedicine();
                 break;
         }
     }
@@ -389,9 +396,6 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
 
     public void Save(int condition){
-
-
-
         MedicineName = textInputLayoutMedicineName.getEditText().getText().toString();
         dosesPerDay= String.valueOf(numberPickerDosesPerDay.getValue());
         quantity_atatime = String.valueOf(numberPickerQuantityAtaTime.getValue());
@@ -407,13 +411,13 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
         values.put(MedicinesDbHandler.COL_NUMBER_PURCHASED, medicinesPurchased);
 
         long returnValue =MedicinesDbHandler.getInstance(this).insert(values);
-        Util.ToastDisplay(this, "returnValue "+returnValue);
+//        Util.ToastDisplay(this, "returnValue "+returnValue);
         if(returnValue != 5 && returnValue != -1)
             switch (condition){
                 case 1:
                     ContentValues cv = getContentValuesTimeOfDose(returnValue,doseTimeOne);
                     long returnTimeDb =TimeOfDoseDbHandler.getInstance(this).insert(cv);
-                    Util.ToastDisplay(this, "returnValue DOSE "+returnTimeDb);
+//                    Util.ToastDisplay(this, "returnValue DOSE "+returnTimeDb);
                     break;
 
                 case 2:
@@ -422,8 +426,8 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
                     ContentValues cv_22 = getContentValuesTimeOfDose(returnValue,doseTimeTwo);
                     long returnTimeDb_22 =TimeOfDoseDbHandler.getInstance(this).insert(cv_22);
-                    Util.ToastDisplay(this, "returnTimeDb_21 "+returnTimeDb_21);
-                    Util.ToastDisplay(this, "returnTimeDb_22 "+returnTimeDb_22);
+//                    Util.ToastDisplay(this, "returnTimeDb_21 "+returnTimeDb_21);
+//                    Util.ToastDisplay(this, "returnTimeDb_22 "+returnTimeDb_22);
                     break;
 
                 case 3:
@@ -435,16 +439,21 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
                     ContentValues cv_33 = getContentValuesTimeOfDose(returnValue,doseTimeThree);
                     long returnTimeDb_33 =TimeOfDoseDbHandler.getInstance(this).insert(cv_33);
-                    Util.ToastDisplay(this, "returnTimeDb_31"+returnTimeDb_31);
-                    Util.ToastDisplay(this, "returnTimeDb_32"+returnTimeDb_32);
-                    Util.ToastDisplay(this, "returnTimeDb_33"+returnTimeDb_33);
+//                    Util.ToastDisplay(this, "returnTimeDb_31"+returnTimeDb_31);
+//                    Util.ToastDisplay(this, "returnTimeDb_32"+returnTimeDb_32);
+//                    Util.ToastDisplay(this, "returnTimeDb_33"+returnTimeDb_33);
                     break;
 
             }
 
 
-        setResult(Constants.START_ACTIVITY_FOR_RESULT_ADD_MEDIA_INFO);
-        finish();
+       if(returnValue != 5)  {
+           setResult(Constants.START_ACTIVITY_FOR_RESULT_ADD_MEDIA_INFO);
+           finish();
+       }
+       else
+           Util.ToastDisplay(this,"Already Added");
+
     }
 
 
@@ -454,6 +463,17 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
         ContentValues values = new ContentValues();
         values.put(TimeOfDoseDbHandler.COL_MEDICINE_ID, medicineId);
         values.put(TimeOfDoseDbHandler.COL_DODE_TIME, doseTime);
+        return values;
+
+    }
+
+
+    public ContentValues getContentValuesTimeOfDoseUpdate(TimeOfDoses timeOfDose){
+
+        ContentValues values = new ContentValues();
+        values.put(TimeOfDoseDbHandler.COL_ID, timeOfDose.getId());
+        values.put(TimeOfDoseDbHandler.COL_MEDICINE_ID, medicinesToEdit.getId());
+        values.put(TimeOfDoseDbHandler.COL_DODE_TIME, timeOfDose.getDosetime());
         return values;
 
     }
@@ -480,12 +500,12 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
                     break;
                 case 2:
                     textViewPickTimeOne.setText(timeOfDosesToEdit.get(0).getDosetime());
-                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(1).getDosetime());
+                    textViewPickTimeTwo.setText(timeOfDosesToEdit.get(1).getDosetime());
                     break;
                 case 3:
                     textViewPickTimeOne.setText(timeOfDosesToEdit.get(0).getDosetime());
-                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(1).getDosetime());
-                    textViewPickTimeOne.setText(timeOfDosesToEdit.get(2).getDosetime());
+                    textViewPickTimeTwo.setText(timeOfDosesToEdit.get(1).getDosetime());
+                    textViewPickTimeThree.setText(timeOfDosesToEdit.get(2).getDosetime());
                     break;
             }
 
@@ -496,9 +516,139 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
             int spinnerIndex =   medicinesToEdit.getDose_frequency().equals("daily")? 0:1;
             spinner.setSelectedIndex(spinnerIndex);
-            textViewSaveMedicine.setClickable(false);
+//            textViewSaveMedicine.setClickable(false);
+
+        }
+    }
+
+
+    private void updateMedicineEdit() {
+
+        String afterEditTimePickerOne,afteEditTimePickerTwo,afteEditTimePickerThree;
+        String afterEditDoseFrquency, afterEditQtyAtaTime,afterEditDosePerDay, afterEditMedicinesPurchased;
+        String afterEditMedicineName;
+        afterEditTimePickerOne = textViewPickTimeOne.getText().toString();
+        afteEditTimePickerTwo = textViewPickTimeTwo.getText().toString();
+        afteEditTimePickerThree= textViewPickTimeThree.getText().toString();
+        afterEditDoseFrquency =  spinner.getText().toString();
+        afterEditQtyAtaTime = String.valueOf(numberPickerQuantityAtaTime.getValue());
+        afterEditDosePerDay = String.valueOf(numberPickerDosesPerDay.getValue());
+        afterEditMedicinesPurchased = String.valueOf(numberPickerMedicinesPurchased.getValue());
+        afterEditMedicineName = textInputLayoutMedicineName.getEditText().getText().toString();
+
+        boolean changed = false;
+
+        if(timeOfDosesToEdit.size()==1){
+
+            if(!afterEditDoseFrquency.equals(medicinesToEdit.getDose_frequency()) ||
+                    !afterEditQtyAtaTime.equals(medicinesToEdit.getDose_quantity())||
+                    !afterEditDosePerDay.equals(medicinesToEdit.getDoses_perday())||
+                    !afterEditMedicinesPurchased.equals(medicinesToEdit.getNo_dose_purchased())||
+                    !afterEditMedicineName.equals(medicinesToEdit.getName())||
+                    !afterEditTimePickerOne.equals(timeOfDosesToEdit.get(0).getDosetime()))
+                changed = true;
 
 
         }
+        else if(timeOfDosesToEdit.size()==2){
+
+            if(!afterEditDoseFrquency.equals(medicinesToEdit.getDose_frequency()) ||
+                    !afterEditQtyAtaTime.equals(medicinesToEdit.getDose_quantity())||
+                    !afterEditDosePerDay.equals(medicinesToEdit.getDoses_perday())||
+                    !afterEditMedicinesPurchased.equals(medicinesToEdit.getNo_dose_purchased())||
+                    !afterEditMedicineName.equals(medicinesToEdit.getName())||
+                    !afterEditTimePickerOne.equals(timeOfDosesToEdit.get(0).getDosetime())||
+                    !afteEditTimePickerTwo.equals(timeOfDosesToEdit.get(1).getDosetime()))
+                changed = true;
+
+
+        }
+        else if(timeOfDosesToEdit.size()==3){
+
+            if(!afterEditDoseFrquency.equals(medicinesToEdit.getDose_frequency()) ||
+                    !afterEditQtyAtaTime.equals(medicinesToEdit.getDose_quantity())||
+                    !afterEditDosePerDay.equals(medicinesToEdit.getDoses_perday())||
+                    !afterEditMedicinesPurchased.equals(medicinesToEdit.getNo_dose_purchased())||
+                    !afterEditMedicineName.equals(medicinesToEdit.getName())||
+                    !afterEditTimePickerOne.equals(timeOfDosesToEdit.get(0).getDosetime())||
+                    !afteEditTimePickerTwo.equals(timeOfDosesToEdit.get(1).getDosetime())||
+                    !afteEditTimePickerThree.equals(timeOfDosesToEdit.get(2).getDosetime()))
+                changed = true;
+
+
+        }
+
+
+        if(changed){
+            ContentValues values = new ContentValues();
+            values.put(MedicinesDbHandler.COL_ID, medicinesToEdit.getId());
+            values.put(MedicinesDbHandler.COL_NAME, afterEditMedicineName);
+            values.put(MedicinesDbHandler.COL_DOS_FREQUENCY, afterEditDoseFrquency);
+            values.put(MedicinesDbHandler.COL_DOS_QUANTITY, afterEditQtyAtaTime);
+            values.put(MedicinesDbHandler.COL_DOSES_PERDAY, afterEditDosePerDay);
+            values.put(MedicinesDbHandler.COL_NUMBER_PURCHASED, afterEditMedicinesPurchased);
+
+
+            long retturnResponseUpdate = MedicinesDbHandler.getInstance(this).Update(values);
+
+//            Util.ToastDisplay(this,"retturnResponseUpdate "+retturnResponseUpdate);
+
+
+            boolean updated= false;
+
+                  switch (timeOfDosesToEdit.size()){
+                      case 2:
+
+                              ContentValues cv21 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0));
+                              long returnTimeDb21 =TimeOfDoseDbHandler.getInstance(this).update(cv21);
+
+                              ContentValues cv22 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(1));
+                              long returnTimeDb22 =TimeOfDoseDbHandler.getInstance(this).update(cv22);
+
+                              updated= true;
+
+                                // Util.ToastDisplay(this, "returnTimeDb_31 "+returnTimeDb21);
+                                // Util.ToastDisplay(this, "returnTimeDb_32 "+returnTimeDb22);
+
+                          break;
+                      case 3:
+
+                              ContentValues cv31 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0));
+                              long returnTimeDb31 =TimeOfDoseDbHandler.getInstance(this).update(cv31);
+
+                              ContentValues cv32 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(1));
+                              long returnTimeDb32 =TimeOfDoseDbHandler.getInstance(this).update(cv32);
+
+                              ContentValues cv33 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(2));
+                              long returnTimeDb33 =TimeOfDoseDbHandler.getInstance(this).update(cv33);
+
+                              updated= true;
+                            //Util.ToastDisplay(this, "returnTimeDb_31 "+returnTimeDb31);
+                            //Util.ToastDisplay(this, "returnTimeDb_32 "+returnTimeDb32);
+                            // Util.ToastDisplay(this, "returnTimeDb_33 "+returnTimeDb33);
+                          break;
+
+                      default:
+                          ContentValues cv = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0));
+                          long returnTimeDb =TimeOfDoseDbHandler.getInstance(this).update(cv);
+                          updated= true;
+                          // Util.ToastDisplay(this, "returnTimeDb "+returnTimeDb);
+                          break;
+                  }
+
+
+            if(updated) {
+                setResult(Constants.START_ACTIVITY_FOR_RESULT_EDIT_MEDIA_INFO);
+                finish();
+            }
+            else
+                Util.ToastDisplay(this,"something went wrong");
+
+
+        }
+        else
+            Util.ToastDisplay(this,"No Changes");
+
+
     }
 }

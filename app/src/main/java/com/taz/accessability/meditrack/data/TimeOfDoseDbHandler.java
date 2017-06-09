@@ -136,6 +136,26 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
     }
 
 
+
+
+    public long update(ContentValues value) {
+
+
+
+        //update existing offer
+        long id = value.getAsLong(COL_ID);
+        if (value.containsKey(COL_ID))
+            value.remove(COL_ID);
+        if (value.containsKey(COL_CREATED_AT))
+            value.remove(COL_CREATED_AT);
+        value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
+
+        return DatabaseHandler.getInstance(context).getWritableDatabase().update(TimeOfDoseDbHandler.TABLE_NAME, value, COL_ID + " = " + id, null);
+
+    }
+
+
+
     @Override
     public void delete(BaseModel model) {
 
