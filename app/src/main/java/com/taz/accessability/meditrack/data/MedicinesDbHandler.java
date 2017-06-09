@@ -18,6 +18,7 @@ import java.util.List;
 
 import static android.os.Build.VERSION_CODES.M;
 import static com.taz.accessability.meditrack.data.TimeOfDoseDbHandler.COL_MEDICINE_ID;
+import static com.taz.accessability.meditrack.data.TimeOfDoseDbHandler.COL_ORDER;
 
 /**
  * Created by tahzuddin on 04/06/17.
@@ -109,9 +110,13 @@ public class MedicinesDbHandler extends BaseDbHandler{
 
 
     public List<Medicines> getAllMedicines() {
-        Cursor cursor = context.getContentResolver().query(
-                AppContentProvider.URI_MEDICINE, null, null, null, null
-        );
+//        Cursor cursor = context.getContentResolver().query(
+//                AppContentProvider.URI_MEDICINE, null, null, null, COL_ID + " DESC, "
+//        );
+
+
+        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+ " ORDER BY "+ COL_ID+" DESC" ,null);
+
 
         List<Medicines> medicines = new ArrayList<>();
 
@@ -126,19 +131,10 @@ public class MedicinesDbHandler extends BaseDbHandler{
     }
 
 
-//    Cursor cursor = context.getContentResolver().query(
-//            AppContentProvider.URI_TASK, FIELDS,
-//            COL_STATUS + " = " + Task.STATUS_NEW_TASK + " AND ( " + COL_TYPE + " = " + Task.TYPE_INSTALL + " OR " + COL_TYPE + " = " + Task.TYPE_AFFILIATE_INSTALL + " )",
-//            null, null
-
-
-
-
-
 
     public List<TimeOfDoses> getTimeOfDoses(long id) {
         Cursor cursor = context.getContentResolver().query(
-                AppContentProvider.URI_DOSE, null, COL_MEDICINE_ID + " = " + id, null, TimeOfDoseDbHandler.COL_ORDER + " ASC, "
+                AppContentProvider.URI_DOSE, null, COL_MEDICINE_ID + " = " + id, null, COL_ORDER + " ASC, "
         );
 
         List<TimeOfDoses> timeOfDoses = new ArrayList<>();
@@ -236,7 +232,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
 //                AppContentProvider.URI_DOSE, FIELDS, COL_MEDICINE_ID + " = " + medicines.getId(), null, null
 //        );
 
-        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+COL_DOS_FREQUENCY +" = 'daily'" ,null);
+        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+COL_DOS_FREQUENCY +" = 'daily'"+ " ORDER BY "+ COL_ID+" DESC" ,null);
 
         List<Medicines> medicines_list = new ArrayList<>();
 
