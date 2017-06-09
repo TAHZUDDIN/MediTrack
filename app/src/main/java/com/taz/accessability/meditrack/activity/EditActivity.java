@@ -239,7 +239,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
         UserInfoDbHandler.getInstance(this).insertOrUpdate(values);
 
-        Util.ToastDisplay(this, "Updated user info");
+//        Util.ToastDisplay(this, "Updated user info");
 
         setResult(Constants.START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO);
         finish();

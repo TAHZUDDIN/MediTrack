@@ -16,6 +16,9 @@ import com.taz.accessability.meditrack.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.os.Build.VERSION_CODES.M;
+import static com.taz.accessability.meditrack.data.TimeOfDoseDbHandler.COL_MEDICINE_ID;
+
 /**
  * Created by tahzuddin on 04/06/17.
  */
@@ -135,7 +138,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
 
     public List<TimeOfDoses> getTimeOfDoses(long id) {
         Cursor cursor = context.getContentResolver().query(
-                AppContentProvider.URI_DOSE, null, TimeOfDoseDbHandler.COL_MEDICINE_ID + " = " + id, null, TimeOfDoseDbHandler.COL_ORDER + " ASC, "
+                AppContentProvider.URI_DOSE, null, COL_MEDICINE_ID + " = " + id, null, TimeOfDoseDbHandler.COL_ORDER + " ASC, "
         );
 
         List<TimeOfDoses> timeOfDoses = new ArrayList<>();
@@ -182,7 +185,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
         );
         context.getContentResolver().delete(
                 AppContentProvider.URI_DOSE,
-                TimeOfDoseDbHandler.COL_MEDICINE_ID + " = " + model.getId(),
+                COL_MEDICINE_ID + " = " + model.getId(),
                 null
         );
     }
@@ -213,7 +216,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
     public long insert(ContentValues value) {
         Medicines medicines = (Medicines) get(value.getAsString(COL_NAME), value.getAsString(COL_DOS_QUANTITY));
         if (medicines != null) {
-            Util.ToastDisplay(context,"Already added");
+//            Util.ToastDisplay(context,"Already added");
             return 5;
         } else {
             // insert new offer
@@ -221,11 +224,32 @@ public class MedicinesDbHandler extends BaseDbHandler{
             value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
 
 
-            Util.ToastDisplay(context,"Insert Values");
+//            Util.ToastDisplay(context,"Insert Values");
 
             return DatabaseHandler.getInstance(context).getWritableDatabase().insert(MedicinesDbHandler.TABLE_NAME, null, value);
         }
     }
+
+
+    public List<Medicines> getAllMedicinesToday() {
+//        return context.getContentResolver().query(
+//                AppContentProvider.URI_DOSE, FIELDS, COL_MEDICINE_ID + " = " + medicines.getId(), null, null
+//        );
+
+        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+COL_DOS_FREQUENCY +" = 'daily'" ,null);
+
+        List<Medicines> medicines_list = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            Medicines medicine = new Medicines(cursor);
+            medicines_list.add(medicine);
+        }
+
+        cursor.close();
+        return medicines_list;
+    }
+
+
 
 
 

@@ -65,7 +65,7 @@ public class FragmentToday  extends Fragment implements View.OnClickListener {
 
     public void initAdapterAndCall() {
 
-        medicines = MedicinesDbHandler.getInstance(getActivity()).getAllMedicines();
+        medicines = MedicinesDbHandler.getInstance(getActivity()).getAllMedicinesToday();
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewMovies.setLayoutManager(linearLayoutManager);

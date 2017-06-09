@@ -296,7 +296,7 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
             value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
 
 
-            Util.ToastDisplay(context,"Insert Values DOSE");
+//            Util.ToastDisplay(context,"Insert Values DOSE");
 
             return DatabaseHandler.getInstance(context).getWritableDatabase().insert(TimeOfDoseDbHandler.TABLE_NAME, null, value);
 //        }
