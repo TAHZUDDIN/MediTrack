@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
@@ -92,6 +94,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
+
+        for (int i = 0; i < bottomBar.getTabCount(); i++) {
+            BottomBarTab tab = bottomBar.getTabAtPosition(i);
+            tab.setGravity(Gravity.CENTER);
+
+            View icon = tab.findViewById(com.roughike.bottombar.R.id.bb_bottom_bar_icon);
+            // the paddingTop will be modified when select/deselect,
+            // so, in order to make the icon always center in tab,
+            // we need set the paddingBottom equals paddingTop
+            icon.setPadding(0, icon.getPaddingTop(), 0, icon.getPaddingTop());
+
+            View title = tab.findViewById(com.roughike.bottombar.R.id.bb_bottom_bar_title);
+            title.setVisibility(View.GONE);
+        }
+
+
+
 
         //Manually displaying the first fragment - one time only
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
