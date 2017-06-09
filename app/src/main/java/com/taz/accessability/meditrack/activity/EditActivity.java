@@ -468,12 +468,12 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
     }
 
 
-    public ContentValues getContentValuesTimeOfDoseUpdate(TimeOfDoses timeOfDose){
+    public ContentValues getContentValuesTimeOfDoseUpdate(TimeOfDoses timeOfDose,String time){
 
         ContentValues values = new ContentValues();
         values.put(TimeOfDoseDbHandler.COL_ID, timeOfDose.getId());
         values.put(TimeOfDoseDbHandler.COL_MEDICINE_ID, medicinesToEdit.getId());
-        values.put(TimeOfDoseDbHandler.COL_DODE_TIME, timeOfDose.getDosetime());
+        values.put(TimeOfDoseDbHandler.COL_DODE_TIME, time);
         return values;
 
     }
@@ -598,11 +598,10 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
 
                   switch (timeOfDosesToEdit.size()){
                       case 2:
-
-                              ContentValues cv21 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0));
+                              ContentValues cv21 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0),afterEditTimePickerOne);
                               long returnTimeDb21 =TimeOfDoseDbHandler.getInstance(this).update(cv21);
 
-                              ContentValues cv22 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(1));
+                              ContentValues cv22 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(1),afteEditTimePickerTwo);
                               long returnTimeDb22 =TimeOfDoseDbHandler.getInstance(this).update(cv22);
 
                               updated= true;
@@ -613,13 +612,13 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
                           break;
                       case 3:
 
-                              ContentValues cv31 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0));
+                              ContentValues cv31 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0),afterEditTimePickerOne);
                               long returnTimeDb31 =TimeOfDoseDbHandler.getInstance(this).update(cv31);
 
-                              ContentValues cv32 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(1));
+                              ContentValues cv32 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(1),afteEditTimePickerTwo);
                               long returnTimeDb32 =TimeOfDoseDbHandler.getInstance(this).update(cv32);
 
-                              ContentValues cv33 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(2));
+                              ContentValues cv33 = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(2),afteEditTimePickerThree);
                               long returnTimeDb33 =TimeOfDoseDbHandler.getInstance(this).update(cv33);
 
                               updated= true;
@@ -629,7 +628,7 @@ public class EditActivity extends AppCompatActivity implements TextWatcher,
                           break;
 
                       default:
-                          ContentValues cv = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0));
+                          ContentValues cv = getContentValuesTimeOfDoseUpdate(timeOfDosesToEdit.get(0),afterEditTimePickerOne);
                           long returnTimeDb =TimeOfDoseDbHandler.getInstance(this).update(cv);
                           updated= true;
                           // Util.ToastDisplay(this, "returnTimeDb "+returnTimeDb);
