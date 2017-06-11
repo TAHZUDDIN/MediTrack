@@ -11,12 +11,10 @@ import com.taz.accessability.meditrack.data.model.BaseModel;
 import com.taz.accessability.meditrack.data.model.Medicines;
 import com.taz.accessability.meditrack.data.model.TimeOfDoses;
 import com.taz.accessability.meditrack.util.DateTimeUtil;
-import com.taz.accessability.meditrack.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.os.Build.VERSION_CODES.M;
 import static com.taz.accessability.meditrack.data.TimeOfDoseDbHandler.COL_MEDICINE_ID;
 import static com.taz.accessability.meditrack.data.TimeOfDoseDbHandler.COL_ORDER;
 
@@ -129,6 +127,41 @@ public class MedicinesDbHandler extends BaseDbHandler{
         cursor.close();
         return medicines;
     }
+
+
+    public List<Medicines> getAllMedicinesLIKE(String name) {
+//        Cursor cursor = context.getContentResolver().query(
+//                AppContentProvider.URI_MEDICINE, null, null, null, COL_ID + " DESC, "
+//        );
+
+
+        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+ " WHERE "+ COL_NAME+" LIKE '"+name +"'",null);
+
+
+        List<Medicines> medicines = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            //cursor is not empty
+            Medicines medicine = new Medicines(cursor);
+            medicines.add(medicine);
+        }
+
+        cursor.close();
+        return medicines;
+    }
+
+
+
+
+//    String selectQuery = " select * from tbl_Customer where Customer_Name like  '"
+//            + name
+//            + "' or Customer_Email like '"
+//            + email
+//            + "' or Customer_Phone like '"
+//            + Phone
+//            + "' ORDER BY Customer_Id DESC";
+//
+//    Cursor cursor = mDb.rawQuery(selectQuery, null);`
 
 
 

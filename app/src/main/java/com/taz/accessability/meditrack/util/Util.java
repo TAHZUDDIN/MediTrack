@@ -9,13 +9,17 @@ import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
+import com.taz.accessability.meditrack.app.MyApplication;
+import com.taz.accessability.meditrack.data.MedicinesDbHandler;
 import com.taz.accessability.meditrack.data.UserInfoDbHandler;
+import com.taz.accessability.meditrack.data.model.Medicines;
 import com.taz.accessability.meditrack.data.model.UserInfo;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by tahzuddin on 6/6/17.
@@ -71,5 +75,22 @@ public class Util {
 //        else
 ////        System.println('The selected time is PM');
 
+    }
+
+
+
+
+    public static String[]  medicinesNames(){
+
+        List<Medicines> medicines = MedicinesDbHandler.getInstance(MyApplication.getInstance()).getAllMedicines();
+
+        String[] toppings = new String[medicines.size()];
+
+        for(int i=0; i< medicines.size(); i++){
+
+                toppings[i]= medicines.get(i).getName();
+        }
+
+        return toppings;
     }
 }

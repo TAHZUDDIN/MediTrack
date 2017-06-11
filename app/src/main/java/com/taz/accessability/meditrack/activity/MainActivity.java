@@ -1,7 +1,13 @@
 package com.taz.accessability.meditrack.activity;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,7 +17,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CursorAdapter;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
@@ -19,6 +27,7 @@ import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
+import com.taz.accessability.meditrack.adapter.CursorAdapterSimple;
 import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.fragment.FragmentAll;
 import com.taz.accessability.meditrack.fragment.FragmentSettings;
@@ -37,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RelativeLayout RL_button_sos_main,
                    RL_button_sos_main_search ;
     Toolbar toolbar ;
+    SearchView searchView;
+
+
+    private  String[] SUGGESTIONS = {};
+    public android.widget.CursorAdapter mAdapter;
+
 
 
 
@@ -45,7 +60,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        SUGGESTIONS = Util.medicinesNames();
+
+
+        // Adapter suggestion related
+
+        final String[] from = new String[] {"medicineName"};
+        final int[] to = new int[] {android.R.id.text1};
+        mAdapter = new CursorAdapterSimple(this,
+                android.R.layout.simple_list_item_1,
+                null,
+                from,
+                to,
+                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+
+
+
+
+
         toolbar = (Toolbar)findViewById(R.id.toolbar);
+        searchView = (SearchView)findViewById(R.id.id_searchView);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        ComponentName cn = new ComponentName(this, SearchActivity.class);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(cn));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                onSearchRequested();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                populateAdapter(newText);
+                onSearchRequested();
+                return false;
+            }
+        });
+
+
+
+        // Search suggestion related
+        searchView.setSuggestionsAdapter(mAdapter);
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionClick(int position) {
+
+
+                Cursor cursor = (Cursor) searchView.getSuggestionsAdapter().getItem(position);
+                String cityname = cursor.getString(cursor
+                        .getColumnIndex("medicineName"));
+
+
+                Util.ToastDisplay(MainActivity.this,"Selected "+cityname);
+                // Your code here
+                return true;
+            }
+
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                // Your code here
+                return true;
+            }
+        });
+
+
+
+
 
         RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
         rippleBackground.startRippleAnimation();
@@ -56,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         RL_button_sos_main = (RelativeLayout) findViewById(R.id.is_button_sos_main);
         RL_button_sos_main.setOnClickListener(this);
-//        startAnimationButton();
+
 
 
         RL_button_sos_main_search = (RelativeLayout) findViewById(R.id.is_button_sos_main_search);
@@ -130,6 +215,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textViewToolbarTitle.setText(toolbarTitle);
 
     }
+
+
+
+    // Related to search suggestion
+    private void populateAdapter(String query) {
+        final MatrixCursor c = new MatrixCursor(new String[]{ BaseColumns._ID, "medicineName" });
+        for (int i=0; i<SUGGESTIONS.length; i++) {
+            if (SUGGESTIONS[i].toLowerCase().startsWith(query.toLowerCase()))
+                c.addRow(new Object[] {i, SUGGESTIONS[i]});
+        }
+        mAdapter.changeCursor(c);
+    }
+
+
 
 
 
@@ -220,5 +319,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
         }
+    }
+
+
+    @Override
+    public boolean onSearchRequested() {
+//          Util.ToastDisplay(this,"onSearchRequested");
+
+
+        startSearch(null, false, null, false);
+
+        return true;
     }
 }
