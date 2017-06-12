@@ -210,6 +210,24 @@ public class TimeOfDoseDbHandler extends BaseDbHandler {
     }
 
 
+
+    public List<TimeOfDoses> getAll() {
+        Cursor c= context.getContentResolver().query(
+                AppContentProvider.URI_DOSE, FIELDS, null, null, null
+        );
+
+        List<TimeOfDoses> timeOfDoses = new ArrayList<>();
+
+        while (c.moveToNext()){
+            TimeOfDoses timeOfDose = new TimeOfDoses(c);
+            timeOfDoses.add(timeOfDose);
+        }
+        return timeOfDoses;
+    }
+
+
+
+
     public List<TimeOfDoses> getAll(Medicines medicines) {
         Cursor c= context.getContentResolver().query(
                 AppContentProvider.URI_DOSE, FIELDS, COL_MEDICINE_ID + " = " + medicines.getId(), null, null

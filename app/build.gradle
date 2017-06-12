@@ -17,7 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/xml', 'src/main/res/menu'] } }
+    sourceSets {
+        main {
+            res.srcDirs = ['src/main/res', 'src/main/res/xml', 'src/main/res/menu', 'src/main/res/raw']
+        }
+    }
 }
 
 dependencies {
@@ -48,7 +52,6 @@ dependencies {
 
     compile 'com.tuyenmonkey:mkloader:1.2.0'
     compile 'com.skyfishjy.ripplebackground:library:1.0.1'
-
 
 //    http://javapapers.com/android/android-searchview-action-bar-tutorial/
 //    http://www.viralandroid.com/2016/04/simple-android-searchview-example.html

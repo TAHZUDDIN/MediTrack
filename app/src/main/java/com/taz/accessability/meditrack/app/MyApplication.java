@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Intent;
 
+import com.taz.accessability.meditrack.util.AlarmUtil;
 import com.taz.accessability.meditrack.util.PermissionsUtil;
 
 
@@ -15,6 +16,7 @@ public class MyApplication extends Application {
     private static MyApplication myApplication;
     public final String TAG = MyApplication.class.getSimpleName();
     PermissionsUtil permissionsUtil;
+    AlarmUtil alarmUtil;
 
 
     public static synchronized MyApplication getInstance() {
@@ -33,5 +35,15 @@ public class MyApplication extends Application {
         else
             return permissionsUtil;
     }
+
+
+    public AlarmUtil getInstanceAlarmUtil(){
+        if(alarmUtil == null)
+            return alarmUtil = new AlarmUtil();
+        else
+            return alarmUtil;
+    }
+
+
 
 }
