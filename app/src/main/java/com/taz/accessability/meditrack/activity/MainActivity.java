@@ -28,6 +28,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.skyfishjy.library.RippleBackground;
 import com.taz.accessability.meditrack.R;
 import com.taz.accessability.meditrack.adapter.CursorAdapterSimple;
+import com.taz.accessability.meditrack.app.MyApplication;
 import com.taz.accessability.meditrack.constants.Constants;
 import com.taz.accessability.meditrack.fragment.FragmentAll;
 import com.taz.accessability.meditrack.fragment.FragmentSettings;
@@ -59,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(MyApplication.getInstance().getInstanceAlarmUtil().alarmActiveOrNot() == null)
+            MyApplication.getInstance().getInstanceAlarmUtil().setAlarmTime();
+
 
 
         SUGGESTIONS = Util.medicinesNames();
@@ -299,12 +304,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // check if the request code is same as what is passed  here it is 2
         if(requestCode== Constants.START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO)
         {
+            MyApplication.getInstance().getInstanceAlarmUtil().cancelAndStartAlarmManager();
+
             if(fragmentSettings != null)
                 fragmentSettings.UpdateUi();
 
         }
         else if(requestCode== Constants.START_ACTIVITY_FOR_RESULT_EDIT_MEDIA_INFO){
 
+            MyApplication.getInstance().getInstanceAlarmUtil().cancelAndStartAlarmManager();
             if(fragmentAll != null)
                 fragmentAll.UpdateUi();
 

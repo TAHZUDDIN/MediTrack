@@ -24,4 +24,7 @@ public class Constants {
     public static String   EDIT_MEDICINE = "Edit Medicine";
     public static String   ADD_MEDICINE = "Add Medicine";
     public static String   MEDICINE = "medicine";
+
+    public static String   MEDICINE_IN_ALARM = "medicine_in_alarm";
+    public static String   TIMEOFDOSE_IN_ALARM = "timeofdose_in_alarm";
 }

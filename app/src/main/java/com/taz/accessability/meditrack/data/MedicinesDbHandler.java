@@ -112,10 +112,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
 //                AppContentProvider.URI_MEDICINE, null, null, null, COL_ID + " DESC, "
 //        );
 
-
         Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+ " ORDER BY "+ COL_ID+" DESC" ,null);
-
-
         List<Medicines> medicines = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -129,15 +126,36 @@ public class MedicinesDbHandler extends BaseDbHandler{
     }
 
 
-    public List<Medicines> getAllMedicinesLIKE(String name) {
+
+
+
+    public Medicines getMedicines(long medicine_id) {
 //        Cursor cursor = context.getContentResolver().query(
 //                AppContentProvider.URI_MEDICINE, null, null, null, COL_ID + " DESC, "
 //        );
 
+        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+ " ORDER BY "+ COL_ID+" DESC" ,null);
+        Medicines medicines = null;
 
+        if(cursor.moveToFirst() && cursor.getCount() != 0) {
+            //cursor is not empty
+            medicines = new Medicines(cursor);
+        }
+
+        cursor.close();
+        return medicines;
+    }
+
+
+
+
+
+
+    public List<Medicines> getAllMedicinesLIKE(String name) {
+//        Cursor cursor = context.getContentResolver().query(
+//                AppContentProvider.URI_MEDICINE, null, null, null, COL_ID + " DESC, "
+//        );
         Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+ " WHERE "+ COL_NAME+" LIKE '%"+name +"%'",null);
-
-
         List<Medicines> medicines = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -245,19 +263,16 @@ public class MedicinesDbHandler extends BaseDbHandler{
     public long insert(ContentValues value) {
         Medicines medicines = (Medicines) get(value.getAsString(COL_NAME), value.getAsString(COL_DOS_QUANTITY));
         if (medicines != null) {
-//            Util.ToastDisplay(context,"Already added");
             return 5;
         } else {
             // insert new offer
             value.put(COL_CREATED_AT, DateTimeUtil.getNowDateTime());
             value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
-
-
-//            Util.ToastDisplay(context,"Insert Values");
-
             return DatabaseHandler.getInstance(context).getWritableDatabase().insert(MedicinesDbHandler.TABLE_NAME, null, value);
         }
     }
+
+
 
 
     public List<Medicines> getAllMedicinesToday() {
@@ -277,8 +292,6 @@ public class MedicinesDbHandler extends BaseDbHandler{
         cursor.close();
         return medicines_list;
     }
-
-
 
 
 
@@ -310,8 +323,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
 
 
     public long Update(ContentValues value) {
-
-            //update existing offer
+             //update existing offer
             long id = value.getAsLong(COL_ID);
             if (value.containsKey(COL_ID))
                 value.remove(COL_ID);
@@ -320,7 +332,6 @@ public class MedicinesDbHandler extends BaseDbHandler{
             value.put(COL_UPDATED_AT, DateTimeUtil.getNowDateTime());
 
             return DatabaseHandler.getInstance(context).getWritableDatabase().update(MedicinesDbHandler.TABLE_NAME, value, COL_ID + " = " + id, null);
-
     }
 
 
@@ -333,7 +344,6 @@ public class MedicinesDbHandler extends BaseDbHandler{
         for (int i = 0; i < values.length; i++) {
             values[i] = medicines.get(i).getContent(true);
         }
-
         bulkInsert(values);
     }
 

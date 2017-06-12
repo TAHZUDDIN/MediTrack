@@ -4,10 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 
 import com.taz.accessability.meditrack.app.MyApplication;
+import com.taz.accessability.meditrack.constants.Constants;
+import com.taz.accessability.meditrack.data.MedicinesDbHandler;
 import com.taz.accessability.meditrack.data.TimeOfDoseDbHandler;
+import com.taz.accessability.meditrack.data.model.Medicines;
 import com.taz.accessability.meditrack.data.model.TimeOfDoses;
 import com.taz.accessability.meditrack.receiver.AlarmBroadcastReceiver;
 
@@ -27,7 +29,10 @@ public class AlarmUtil {
     ArrayList<PendingIntent> intentArray;
     List<TimeOfDoses> timeOfDoses;
 
+
     public void setAlarmTime(){
+
+        Medicines medicines;
 
         Context context = MyApplication.getInstance();
         timeOfDoses = TimeOfDoseDbHandler.getInstance(context).getAll();
@@ -37,16 +42,17 @@ public class AlarmUtil {
 
         for(int i = 0; i < timeOfDoses.size(); ++i)
         {
-            long time = getTimeForAlarm("14:11");
+            medicines = MedicinesDbHandler.getInstance(context).getMedicines(timeOfDoses.get(i).getMedicineId());
+            long time = getTimeForAlarm(timeOfDoses.get(i).getDosetime());
             int id = (int)timeOfDoses.get(i).getId();
 
             Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+            intent.putExtra(Constants.MEDICINE_IN_ALARM,medicines);
+            intent.putExtra(Constants.TIMEOFDOSE_IN_ALARM,timeOfDoses.get(i));
             // Loop counter `i` is used as a `requestCode`
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
             // Single alarms in 1, 2, ..., 10 minutes (in `i` minutes)
-            mgrAlarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime() + 60000 * i,
-                    pendingIntent);
+            mgrAlarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, pendingIntent);
 
             intentArray.add(pendingIntent);
         }
@@ -59,12 +65,16 @@ public class AlarmUtil {
         Context mContext = MyApplication.getInstance();
         AlarmManager am=(AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
 
+        if(intentArray == null)
+            return;
+
         try{
             for(int i =0; i<intentArray.size(); i++){
-                PendingIntent pendingIntent = intentArray.get(0);
+                PendingIntent pendingIntent = intentArray.get(i);
                 am.cancel(pendingIntent);
 //                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, requestCode, intent,0);
-           }
+            }
+            intentArray = null;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -101,6 +111,18 @@ public class AlarmUtil {
     public int convertStringToIntMinutes(String time){
         String[] animalsArray = time.split(":");
         return Integer.valueOf(animalsArray[1]);
+    }
+
+
+
+    public void cancelAndStartAlarmManager(){
+        MyApplication.getInstance().getInstanceAlarmUtil().cancelAlarmIfExists();
+        MyApplication.getInstance().getInstanceAlarmUtil().setAlarmTime();
+    }
+
+
+    public ArrayList<PendingIntent> alarmActiveOrNot(){
+        return intentArray;
     }
 
 
