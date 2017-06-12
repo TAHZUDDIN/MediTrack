@@ -46,6 +46,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
         textViewToolbarTitle = (TextView)findViewById(R.id.id_toolbar_title);
         textViewToolbarTitle.setText("Search Result");
 
@@ -77,17 +78,19 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     intent.getStringExtra(SearchManager.QUERY);
             doSearch(query);
         }
+        else if(intent.getStringExtra(Constants.SEARCH_SUGGESTION_SELECTION) != null){
+
+            nameLike = getIntent().getStringExtra(Constants.SEARCH_SUGGESTION_SELECTION);
+            doSearch(nameLike);
+        }
     }
 
+
+
     private void doSearch(String queryStr) {
-
-
-        Util.ToastDisplay(this, "queryStr "+queryStr);
-
+//        Util.ToastDisplay(this, "queryStr "+queryStr);
         nameLike = queryStr;
-
         initAdapterAndCall();
-
         // get a Cursor, prepare the ListAdapter
         // and set it
     }
@@ -143,23 +146,21 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+
     public void UpdateUi(){
         initAdapterAndCall();
     }
 
 
-    public void startAnimationButton() {
 
+    public void startAnimationButton() {
         RippleBackground rippleBackground_search=(RippleBackground)findViewById(R.id.content);
         rippleBackground_search.startRippleAnimation();
-
         final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.bounce);
-
         // Use bounce interpolator with amplitude 0.2 and frequency 10
         MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 10);
         myAnim.setInterpolator(interpolator);
         RL_button_sos_main.startAnimation(myAnim);
-
     }
 
 

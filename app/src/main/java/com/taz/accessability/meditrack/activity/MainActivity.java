@@ -112,11 +112,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 Cursor cursor = (Cursor) searchView.getSuggestionsAdapter().getItem(position);
-                String cityname = cursor.getString(cursor
+                String medicineName = cursor.getString(cursor
                         .getColumnIndex("medicineName"));
 
+//                Util.ToastDisplay(MainActivity.this,"Selected "+medicineName);
+                startActivitySearchResultOnsuggestionSelection(medicineName);
 
-                Util.ToastDisplay(MainActivity.this,"Selected "+cityname);
+
                 // Your code here
                 return true;
             }
@@ -307,6 +309,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentAll.UpdateUi();
 
         }
+        else if(requestCode== Constants.START_ACTIVITY_FOR_RESULT_FROM_SEARCH_SUGGESTION_SELECTION){
+            searchView.setFocusable(false);
+
+            if(fragmentAll != null)
+                fragmentAll.UpdateUi();
+
+        }
     }
 
 
@@ -330,5 +339,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startSearch(null, false, null, false);
 
         return true;
+    }
+
+
+
+    public void startActivitySearchResultOnsuggestionSelection(String selectedText){
+        searchView.setFocusable(false);
+        Intent i = new Intent(this, SearchActivity.class);
+        i.putExtra(Constants.SEARCH_SUGGESTION_SELECTION,selectedText);
+        startActivityForResult(i,Constants.START_ACTIVITY_FOR_RESULT_FROM_SEARCH_SUGGESTION_SELECTION);
     }
 }

@@ -135,7 +135,7 @@ public class MedicinesDbHandler extends BaseDbHandler{
 //        );
 
 
-        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+ " WHERE "+ COL_NAME+" LIKE '"+name +"'",null);
+        Cursor cursor=DatabaseHandler.getInstance(context).getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NAME+ " WHERE "+ COL_NAME+" LIKE '%"+name +"%'",null);
 
 
         List<Medicines> medicines = new ArrayList<>();

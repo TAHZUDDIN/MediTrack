@@ -8,11 +8,13 @@ public class Constants {
     public static String   EDIT_USER_INFO = "edit_user_info";
     public static String   EDIT_MEDI_INFO = "edit_medi_info";
     public static String   ADD_MEDI_INFO = "add_medi_info";
+    public static String   SEARCH_SUGGESTION_SELECTION = "search_suggestion_selection";
 
 
     public static int  START_ACTIVITY_FOR_RESULT_EDIT_USER_INFO = 1;
     public static int  START_ACTIVITY_FOR_RESULT_EDIT_MEDIA_INFO = 2;
     public static int  START_ACTIVITY_FOR_RESULT_ADD_MEDIA_INFO = 3;
+    public static int  START_ACTIVITY_FOR_RESULT_FROM_SEARCH_SUGGESTION_SELECTION = 4;
 
 
     public static String   SETTINGS = "Settings";
