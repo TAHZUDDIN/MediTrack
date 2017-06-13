@@ -22,12 +22,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
 
-        Medicines medicines =(Medicines)intent.getSerializableExtra(Constants.MEDICINE_IN_ALARM);
-        TimeOfDoses timeOfDoses =(TimeOfDoses)intent.getSerializableExtra(Constants.TIMEOFDOSE_IN_ALARM);
+//        Medicines medicines =(Medicines)intent.getSerializableExtra(Constants.MEDICINE_IN_ALARM);
+//        TimeOfDoses timeOfDoses =(TimeOfDoses)intent.getSerializableExtra(Constants.TIMEOFDOSE_IN_ALARM);
+//
+//        String msgTitle = medicines.getName();
+//        String msgTicker = timeOfDoses.getDosetime();
+//        String msgText = medicines.getName();
 
-        String msgTitle = medicines.getName();
-        String msgTicker = timeOfDoses.getDosetime();
-        String msgText = medicines.getName();
+        String msgTitle = "msg title";
+        String msgTicker = "ticker";
+        String msgText = "msg Text";
 
 //        mp=MediaPlayer.create(context, R.raw.alrm   );
 //        mp.start();
