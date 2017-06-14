@@ -32,49 +32,45 @@ public class AlarmUtil {
 
     public void setAlarmTime(){
 
-//        Medicines medicines;
-//
-//        Context context = MyApplication.getInstance();
-//        timeOfDoses = TimeOfDoseDbHandler.getInstance(context).getAll();
-//
-//        AlarmManager mgrAlarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-//        intentArray = new ArrayList<PendingIntent>();
-//
-//        for(int i = 0; i < timeOfDoses.size(); ++i)
-//        {
-//            medicines = MedicinesDbHandler.getInstance(context).getMedicines(timeOfDoses.get(i).getMedicineId());
-//            long time = getTimeForAlarm(timeOfDoses.get(i).getDosetime());
-//            int id = (int)timeOfDoses.get(i).getId();
-//
-//            Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-//            intent.putExtra(Constants.MEDICINE_IN_ALARM,medicines);
-//            intent.putExtra(Constants.TIMEOFDOSE_IN_ALARM,timeOfDoses.get(i));
-//            // Loop counter `i` is used as a `requestCode`
-//            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
-//            // Single alarms in 1, 2, ..., 10 minutes (in `i` minutes)
-//            mgrAlarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, pendingIntent);
-//
-//            intentArray.add(pendingIntent);
-//        }
+        Medicines medicines;
 
-
-        AlarmManager alarmMgr;
-        PendingIntent alarmIntent;
         Context context = MyApplication.getInstance();
+        timeOfDoses = TimeOfDoseDbHandler.getInstance(context).getAll();
 
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context,  AlarmBroadcastReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager mgrAlarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        intentArray = new ArrayList<PendingIntent>();
 
-// Set the alarm to start at 8:30 a.m.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 15);
+        for(int i = 0; i < timeOfDoses.size(); ++i)
+        {
+            medicines = MedicinesDbHandler.getInstance(context).getMedicines(timeOfDoses.get(i).getMedicineId());
+            long time = getTimeForAlarm(timeOfDoses.get(i).getDosetime());
 
-// setRepeating() lets you specify a precise custom interval--in this case,
-// 20 minutes.
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+            Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+            intent.putExtra(Constants.MEDICINE_IN_ALARM,medicines);
+            intent.putExtra(Constants.TIMEOFDOSE_IN_ALARM,timeOfDoses.get(i));
+            // Loop counter `i` is used as a `requestCode`
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, i, intent, 0);
+            // Single alarms in 1, 2, ..., 10 minutes (in `i` minutes)
+            mgrAlarm.setRepeating(AlarmManager.RTC_WAKEUP, time,AlarmManager.INTERVAL_DAY, pendingIntent);
+
+            intentArray.add(pendingIntent);
+        }
+
+
+//        AlarmManager alarmMgr;
+//        PendingIntent alarmIntent;
+//        Context context = MyApplication.getInstance();
+//
+//        alarmMgr = (AlarmManager)context.getSystemService(ALARM_SERVICE);
+//        Intent intent = new Intent(context,  AlarmBroadcastReceiver.class);
+//        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.set(Calendar.HOUR_OF_DAY, 6);
+//        calendar.set(Calendar.MINUTE, 52);
+//
+//        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, alarmIntent);
 
 
 
@@ -85,7 +81,7 @@ public class AlarmUtil {
     public void cancelAlarmIfExists(){
 
         Context mContext = MyApplication.getInstance();
-        AlarmManager am=(AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am=(AlarmManager)mContext.getSystemService(ALARM_SERVICE);
 
         if(intentArray == null)
             return;
@@ -113,7 +109,11 @@ public class AlarmUtil {
         int minutes = convertStringToIntMinutes(time);
 
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(calendar.HOUR_OF_DAY, hour);
+//        if(minutes != 0)
+//            calendar.set(calendar.MINUTE, minutes-1);
+//        else
         calendar.set(calendar.MINUTE, minutes);
         calendar.set(calendar.SECOND, 0);
         calendar.set(calendar.MILLISECOND, 0);

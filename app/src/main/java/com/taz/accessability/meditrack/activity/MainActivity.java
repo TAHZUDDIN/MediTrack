@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(MyApplication.getInstance().getInstanceAlarmUtil().alarmActiveOrNot() == null)
-            MyApplication.getInstance().getInstanceAlarmUtil().setAlarmTime();
+//        if(MyApplication.getInstance().getInstanceAlarmUtil().alarmActiveOrNot() == null)
+//            MyApplication.getInstance().getInstanceAlarmUtil().setAlarmTime();
 
 
 
@@ -322,6 +322,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if(fragmentAll != null)
                 fragmentAll.UpdateUi();
+
+        }
+        else if(requestCode== Constants.START_ACTIVITY_FOR_RESULT_ADD_MEDIA_INFO){
+
+            MyApplication.getInstance().getInstanceAlarmUtil().cancelAndStartAlarmManager();
 
         }
     }
