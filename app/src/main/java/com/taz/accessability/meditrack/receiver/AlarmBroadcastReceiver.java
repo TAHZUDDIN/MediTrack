@@ -39,21 +39,28 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Intent intnt = new Intent(context, MainActivity.class);
         // Open NotificationView.java Activity
         PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
-//        mp=MediaPlayer.create(context, R.raw.alarmclock);
-//        mp.start();
+        mp=MediaPlayer.create(context, R.raw.alarmclock);
+        mp.start();
+
+//        Uri sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.alarmclock);
+
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                                                .setSmallIcon(R.drawable.ic_notification)
+                                                .setSmallIcon(R.mipmap.ic_launcher)
                                                 .setContentTitle(msgTitle)
                                                 .setTicker(msgTicker)
                                                 .setContentIntent(pIntent)
+                                                .setColor(context.getResources().getColor(android.R.color.white))
                                                 .setContentText(msgText);
+
 
 
         mBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND);
         mBuilder.setAutoCancel(true);
+
+
 
         NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1,mBuilder.build());
